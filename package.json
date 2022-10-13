@@ -1,0 +1,16 @@
+{
+  "name": "com.nevelson.ui-helper",
+  "version": "1.0.0",
+  "displayName": "UI Helper",
+  "description": "A lightweight package for quickly setting up UI.",
+  "unity": "2020.3",
+  "dependencies": {
+    "com.unity.test-framework": "1.1.31"
+  },
+  "keywords": [ "UI", "user interface", "UX" ],
+  "author": {
+    "name": "Nicholas Evelson",
+    "email": "runefindergamedev@gmail.com",
+    "url": "https://store.steampowered.com/app/1481840/Frisbros/"
+  }
+}
