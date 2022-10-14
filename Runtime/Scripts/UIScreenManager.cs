@@ -42,10 +42,22 @@ namespace Nevelson.UIHelper
 
         void StartFirstScreen()
         {
+            if (uiScreens.Length == 0)
+            {
+                Debug.LogError($"Could not find any UIScreen under UIScreenManager on go: {gameObject.name}");
+                return;
+            }
+
             currentScreen = uiScreens[0];
             currentScreen.BeforeDisplay();
             currentScreen.Display();
             currentScreen.AfterDisplay();
+
+            if (uiScreens.Length <= 1)
+            {
+                return;
+            }
+
             for (int i = 1; i < uiScreens.Length; i++)
             {
                 uiScreens[i].BeforeHide();

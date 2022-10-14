@@ -61,6 +61,11 @@ namespace Nevelson.UIHelper
         /// </summary>
         protected virtual void BackButton()
         {
+            //if(!isScreenDisplayed)
+            //{
+            //    return;
+            //}
+
             //HOW TO I MAKE THIS INDEPENDENT OF WHAT CONTROLLER SYSTEM THEY USE
             //if (playerOne.GetButtonDown("Back") || playerTwo.GetButtonDown("Back"))
             //{

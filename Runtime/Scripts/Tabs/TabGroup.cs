@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Nevelson.UIHelper
 {
@@ -8,6 +9,7 @@ namespace Nevelson.UIHelper
         [SerializeField] int startingTab;
         [SerializeField] Tab[] tabs;
 
+        EventSystem unityEventSystem;
         TabButton selectedTab;
 
         public void OnTabEnter(TabButton button)
@@ -29,12 +31,32 @@ namespace Nevelson.UIHelper
 
             selectedTab = button;
             selectedTab.Select();
-            int index = button.transform.GetSiblingIndex();
+
+            int index = -1;
+            for (int i = 0; i < tabs.Length; i++)
+            {
+                if (tabs[i].button == button)
+                {
+                    index = i;
+                    break;
+                }
+            }
+
+            if (index == -1)
+            {
+                Debug.LogError($"Could not find index of button {button.gameObject.name}");
+                return;
+            }
+
             for (int i = 0; i < tabs.Length; i++)
             {
                 if (i == index)
                 {
                     tabs[i].tabPage.SetActive(true);
+                    if (tabs[i].setFocusToGameObject != null)
+                    {
+                        unityEventSystem.SetSelectedGameObject(tabs[i].setFocusToGameObject);
+                    }
                 }
                 else
                 {
@@ -45,6 +67,7 @@ namespace Nevelson.UIHelper
 
         void Start()
         {
+            unityEventSystem = EventSystem.current;
             foreach (var tab in tabs)
             {
                 tab.button.TabGroup = this;
@@ -58,5 +81,6 @@ namespace Nevelson.UIHelper
     {
         public TabButton button;
         public GameObject tabPage;
+        public GameObject setFocusToGameObject;
     }
 }
