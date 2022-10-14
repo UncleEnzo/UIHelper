@@ -14,6 +14,7 @@ namespace Nevelson.UIHelper
         Dictionary<Selectable, Navigation> selectables;
         Navigation navigationNone = new Navigation();
         bool isScreenDisplayed;
+        TabGroup[] tabGroups;
 
         CanvasGroup CanvasGroup
         {
@@ -47,6 +48,13 @@ namespace Nevelson.UIHelper
 
         public void BeforeHide()
         {
+            if (tabGroups != null || tabGroups.Length != 0)
+            {
+                foreach (var tabGroup in tabGroups)
+                {
+                    tabGroup.ResetTabs();
+                }
+            }
             LockScreenSelectables();
         }
 
@@ -65,6 +73,7 @@ namespace Nevelson.UIHelper
         protected virtual void Awake()
         {
             navigationNone.mode = Navigation.Mode.None;
+            tabGroups = GetComponentsInChildren<TabGroup>();
         }
 
         protected virtual void Start()

@@ -12,6 +12,11 @@ namespace Nevelson.UIHelper
         EventSystem unityEventSystem;
         TabButton selectedTab;
 
+        public void ResetTabs()
+        {
+            OnTabSelected(tabs[startingTab].button);
+        }
+
         public void OnTabEnter(TabButton button)
         {
             //No-Op as of yet, may expose or something later
@@ -72,7 +77,7 @@ namespace Nevelson.UIHelper
             {
                 tab.button.TabGroup = this;
             }
-            OnTabSelected(tabs[startingTab].button);
+            ResetTabs();
         }
     }
 
