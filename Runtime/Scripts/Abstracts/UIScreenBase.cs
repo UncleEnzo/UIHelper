@@ -1,10 +1,14 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Nevelson.UIHelper
 {
     [RequireComponent(typeof(CanvasGroup))]
     public abstract class UIScreenBase : ButtonsBase, IScreen
     {
+        Dictionary<Selectable, Navigation> selectables;
+        Navigation navigationNone = new Navigation();
         CanvasGroup _canvasGroup;
         CanvasGroup CanvasGroup
         {
@@ -20,7 +24,7 @@ namespace Nevelson.UIHelper
 
         public void BeforeDisplay()
         {
-            throw new System.NotImplementedException();
+            UnlockScreenSelectables();
         }
 
         public virtual void Display()
@@ -35,12 +39,11 @@ namespace Nevelson.UIHelper
         public void AfterDisplay()
         {
             SetUIFocus();
-            throw new System.NotImplementedException();
         }
 
         public void BeforeHide()
         {
-            throw new System.NotImplementedException();
+            LockScreenSelectables();
         }
 
         public virtual void Hide()
@@ -48,18 +51,47 @@ namespace Nevelson.UIHelper
             CanvasGroup.alpha = 0f;
             CanvasGroup.interactable = false;
             CanvasGroup.blocksRaycasts = false;
-            //TODO: NEED TO PREVENT FOCUSING ON AND INTERACTING WITH BUTTONS ON CLOSE
-            //TODO: NEED TO SET PLAYER FOCUS ON APPEARING
         }
 
         public void AfterHide()
         {
+            //TODO: NEED TO SET PLAYER FOCUS ON APPEARING | IF USING CONTROLLER
             throw new System.NotImplementedException();
         }
 
-        protected virtual void Awake() { }
+        protected virtual void Awake()
+        {
+            navigationNone.mode = Navigation.Mode.None;
+        }
         protected virtual void Start() { }
         protected virtual void Update() { }
+
+        void LockScreenSelectables()
+        {
+            if (selectables == null)
+            {
+                selectables = new Dictionary<Selectable, Navigation>();
+                Selectable[] selectableUIElements = GetComponentsInChildren<Selectable>();
+                foreach (var selectable in selectableUIElements)
+                {
+                    selectables.Add(selectable, selectable.navigation);
+                }
+            }
+
+            foreach (KeyValuePair<Selectable, Navigation> selectable in selectables)
+            {
+                Debug.Log($"Locking UI element: {selectable.Key.gameObject.name}");
+
+                selectable.Key.interactable = false;
+                selectable.Key.navigation = navigationNone;
+            }
+
+        }
+
+        void UnlockScreenSelectables()
+        {
+
+        }
 
         void SetUIFocus()
         {
