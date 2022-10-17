@@ -4,17 +4,19 @@ using UnityEngine.EventSystems;
 
 namespace Nevelson.UIHelper
 {
-    public class TabGroup : MonoBehaviour
+    public class TabManager : MonoBehaviour, IUIManager, ISetUIFocus
     {
         [SerializeField] int startingTab;
         [SerializeField] Tab[] tabs;
 
+        Tab currentTab;
         EventSystem unityEventSystem;
         TabButton selectedTab;
+        bool isUsingController = false;
 
-        public void ResetTabs()
+        public void UIReset()
         {
-            OnTabSelected(tabs[startingTab].button);
+            SelectTab(tabs[startingTab].button);
         }
 
         public void OnTabEnter(TabButton button)
@@ -27,7 +29,45 @@ namespace Nevelson.UIHelper
             //No-Op as of yet, may expose or something later
         }
 
+        public void SetUsingController(bool isUsingController)
+        {
+            this.isUsingController = isUsingController;
+        }
+
+        public void SetUIFocus()
+        {
+            if (!isUsingController)
+            {
+                unityEventSystem.SetSelectedGameObject(null);
+                return;
+            }
+
+            if (isUsingController && currentTab.setFocusToGameObject == null)
+            {
+                Debug.LogError($"Attempting to set UI focus to tab {currentTab.tabPage.name} but tab's setFocusToGameobject = {currentTab.setFocusToGameObject}");
+                return;
+            }
+
+            unityEventSystem.SetSelectedGameObject(currentTab.setFocusToGameObject);
+        }
+
         public void OnTabSelected(TabButton button)
+        {
+            SelectTab(button);
+            SetUIFocus();
+        }
+
+        void Start()
+        {
+            unityEventSystem = EventSystem.current;
+            foreach (var tab in tabs)
+            {
+                tab.button.TabGroup = this;
+            }
+            UIReset();
+        }
+
+        void SelectTab(TabButton button)
         {
             if (selectedTab != null)
             {
@@ -58,26 +98,13 @@ namespace Nevelson.UIHelper
                 if (i == index)
                 {
                     tabs[i].tabPage.SetActive(true);
-                    if (tabs[i].setFocusToGameObject != null)
-                    {
-                        unityEventSystem.SetSelectedGameObject(tabs[i].setFocusToGameObject);
-                    }
+                    currentTab = tabs[i];
                 }
                 else
                 {
                     tabs[i].tabPage.SetActive(false);
                 }
             }
-        }
-
-        void Start()
-        {
-            unityEventSystem = EventSystem.current;
-            foreach (var tab in tabs)
-            {
-                tab.button.TabGroup = this;
-            }
-            ResetTabs();
         }
     }
 

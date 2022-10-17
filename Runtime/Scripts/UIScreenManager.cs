@@ -1,13 +1,34 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Nevelson.UIHelper
 {
+    [RequireComponent(typeof(AudioSource))]
     public class UIScreenManager : MonoBehaviour, IManageScreens
     {
-        IScreen[] uiScreens;
-        IScreen currentScreen;
+        [SerializeField] bool isUsingController = false;
+        [SerializeField] AudioClip hoverSound;
+        [SerializeField] AudioClip pressedSound;
 
-        public void ChangeToNextScreen(IScreen nextScreen)
+        AudioSource audioSource;
+        UIScreenBase[] uiScreens;
+        UIScreenBase currentScreen;
+        bool currentIsUsingController;
+        public bool IsUsingController
+        {
+            get => isUsingController;
+            set
+            {
+                if (value != isUsingController)
+                {
+                    RefreshScreenControls();
+                }
+                isUsingController = value;
+                currentIsUsingController = isUsingController;
+            }
+        }
+
+        public void ChangeToNextScreen(UIScreenBase nextScreen)
         {
             if (nextScreen == null)
             {
@@ -15,12 +36,15 @@ namespace Nevelson.UIHelper
                 return;
             }
 
-            currentScreen.BeforeHide();
-            currentScreen.Hide();
-            currentScreen.AfterHide();
-            nextScreen.BeforeDisplay();
-            nextScreen.Display();
-            nextScreen.AfterDisplay();
+            IScreen currentIScreen = currentScreen.GetComponent<IScreen>();
+            IScreen nextIScreen = nextScreen.GetComponent<IScreen>();
+
+            currentIScreen.BeforeHide();
+            currentIScreen.Hide();
+            currentIScreen.AfterHide();
+            nextIScreen.BeforeDisplay();
+            nextIScreen.Display();
+            nextIScreen.AfterDisplay();
             currentScreen = nextScreen;
         }
 
@@ -30,14 +54,39 @@ namespace Nevelson.UIHelper
             StartFirstScreen();
         }
 
+        void Update()
+        {
+            //handles UI controller switching through inspector
+            if (currentIsUsingController != isUsingController)
+            {
+                RefreshScreenControls();
+                currentIsUsingController = isUsingController;
+            }
+        }
+
         void Init()
         {
-            uiScreens = GetComponentsInChildren<IScreen>();
+            audioSource = GetComponent<AudioSource>();
+            foreach (var selectable in GetComponentsInChildren<Selectable>())
+            {
+                UIAudio newComponent = selectable.gameObject.AddComponent<UIAudio>();
+                newComponent.Init(audioSource, hoverSound, pressedSound);
+            }
+            uiScreens = GetComponentsInChildren<UIScreenBase>();
             if (uiScreens == null || uiScreens.Length == 0)
             {
                 Debug.LogError("Could not find any UIScreens on canvas");
                 return;
             }
+        }
+
+        void RefreshScreenControls()
+        {
+            foreach (var screen in uiScreens)
+            {
+                screen.SetUsingController(isUsingController);
+            }
+            currentScreen.SetUIFocus();
         }
 
         void StartFirstScreen()
@@ -48,22 +97,20 @@ namespace Nevelson.UIHelper
                 return;
             }
 
+            for (int i = 0; i < uiScreens.Length; i++)
+            {
+                IScreen iScreen = uiScreens[i].GetComponent<IScreen>();
+
+                iScreen.BeforeHide();
+                iScreen.Hide();
+                iScreen.AfterHide();
+            }
+
             currentScreen = uiScreens[0];
-            currentScreen.BeforeDisplay();
-            currentScreen.Display();
-            currentScreen.AfterDisplay();
-
-            if (uiScreens.Length <= 1)
-            {
-                return;
-            }
-
-            for (int i = 1; i < uiScreens.Length; i++)
-            {
-                uiScreens[i].BeforeHide();
-                uiScreens[i].Hide();
-                uiScreens[i].AfterHide();
-            }
+            IScreen currentIScreen = currentScreen.GetComponent<IScreen>();
+            currentIScreen.BeforeDisplay();
+            currentIScreen.Display();
+            currentIScreen.AfterDisplay();
         }
     }
 }

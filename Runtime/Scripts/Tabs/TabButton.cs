@@ -9,7 +9,7 @@ namespace Nevelson.UIHelper
     [RequireComponent(typeof(Selectable))]
     public class TabButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, ISelectHandler, ISubmitHandler, IDeselectHandler
     {
-        public TabGroup TabGroup { get; set; }
+        public TabManager TabGroup { get; set; }
         public UnityEvent onTabSelected;
         public UnityEvent onTabDeselected;
 
