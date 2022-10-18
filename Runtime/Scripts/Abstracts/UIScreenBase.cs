@@ -37,6 +37,13 @@ namespace Nevelson.UIHelper
             }
         }
 
+        public virtual void Init()
+        {
+            ResetUIManagers();
+            LockSelectables();
+            HideScreenCanvasGroup();
+        }
+
         public virtual void Display()
         {
             if (isScreenDisplayed)
@@ -44,11 +51,9 @@ namespace Nevelson.UIHelper
                 Debug.LogError($"Attempting to display screen that is already displayed {gameObject.name}");
                 return;
             }
-            Debug.Log($"Calling Display on {gameObject.name}");
+
             onDisplay?.Invoke();
-            CanvasGroup.alpha = 1f;
-            CanvasGroup.interactable = true;
-            CanvasGroup.blocksRaycasts = true;
+            DisplayScreenCanvasGroup();
             if (animateScreenDisplay.GetPersistentEventCount() == 0)
             {
                 UnlockSelectables();
@@ -59,7 +64,6 @@ namespace Nevelson.UIHelper
             {
                 animateScreenDisplay.Invoke(() =>
                 {
-                    Debug.Log("Unlocking Screen");
                     UnlockSelectables();
                     SetUIFocus();
                     isScreenDisplayed = true;
@@ -67,7 +71,7 @@ namespace Nevelson.UIHelper
             }
             else
             {
-                Debug.LogError($"Animate screen display does not support more than one ");
+                Debug.LogError($"Animate screen display does not support more than one event");
             }
         }
 
@@ -75,50 +79,25 @@ namespace Nevelson.UIHelper
         {
             if (!isScreenDisplayed)
             {
+                Debug.LogError($"Attempting to hide screen that is already hidden {gameObject.name}");
                 return;
             }
 
             onHide?.Invoke();
-            if (iPopupManagers != null && iPopupManagers.Length != 0)
-            {
-                foreach (var manager in iPopupManagers)
-                {
-                    //Debug.Log($"{this.gameObject.name} calling reset managers");
-                    manager.UIReset();
-                }
-            }
-
-            if (iTabManagers != null && iTabManagers.Length != 0)
-            {
-                foreach (var manager in iTabManagers)
-                {
-                    //Debug.Log($"{this.gameObject.name} calling reset managers");
-                    manager.UIReset();
-                }
-            }
-
+            ResetUIManagers();
             LockSelectables();
 
             if (animateScreenHide.GetPersistentEventCount() == 0)
             {
-                CanvasGroup.alpha = 0f;
-                CanvasGroup.interactable = false;
-                CanvasGroup.blocksRaycasts = false;
-                isScreenDisplayed = false;
+                HideScreenCanvasGroup();
             }
             else if (animateScreenHide.GetPersistentEventCount() == 1)
             {
-                animateScreenHide.Invoke(() =>
-                {
-                    CanvasGroup.alpha = 0f;
-                    CanvasGroup.interactable = false;
-                    CanvasGroup.blocksRaycasts = false;
-                    isScreenDisplayed = false;
-                });
+                animateScreenHide.Invoke(() => HideScreenCanvasGroup());
             }
             else
             {
-                Debug.LogError($"Animate screen hide does not support more than one ");
+                Debug.LogError($"Animate screen hide does not support more than one event");
             }
         }
 
@@ -223,6 +202,42 @@ namespace Nevelson.UIHelper
             {
                 selectables.Add(selectable, selectable.navigation);
             }
+        }
+
+        void ResetUIManagers()
+        {
+            if (iPopupManagers != null && iPopupManagers.Length != 0)
+            {
+                foreach (var manager in iPopupManagers)
+                {
+                    //Debug.Log($"{this.gameObject.name} calling reset managers");
+                    manager.UIReset();
+                }
+            }
+
+            if (iTabManagers != null && iTabManagers.Length != 0)
+            {
+                foreach (var manager in iTabManagers)
+                {
+                    //Debug.Log($"{this.gameObject.name} calling reset managers");
+                    manager.UIReset();
+                }
+            }
+        }
+
+        void DisplayScreenCanvasGroup()
+        {
+            CanvasGroup.alpha = 1f;
+            CanvasGroup.interactable = true;
+            CanvasGroup.blocksRaycasts = true;
+        }
+
+        void HideScreenCanvasGroup()
+        {
+            CanvasGroup.alpha = 0f;
+            CanvasGroup.interactable = false;
+            CanvasGroup.blocksRaycasts = false;
+            isScreenDisplayed = false;
         }
     }
 }

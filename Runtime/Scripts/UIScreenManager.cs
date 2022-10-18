@@ -37,10 +37,11 @@ namespace Nevelson.UIHelper
             }
 
             IScreen currentIScreen = currentScreen.GetComponent<IScreen>();
-            IScreen nextIScreen = nextScreen.GetComponent<IScreen>();
-
             currentIScreen.Hide();
+
+            IScreen nextIScreen = nextScreen.GetComponent<IScreen>();
             nextIScreen.Display();
+
             currentScreen = nextScreen;
         }
 
@@ -96,7 +97,7 @@ namespace Nevelson.UIHelper
             for (int i = 0; i < uiScreens.Length; i++)
             {
                 IScreen iScreen = uiScreens[i].GetComponent<IScreen>();
-                iScreen.Hide();
+                iScreen.Init();
             }
 
             currentScreen = uiScreens[0];

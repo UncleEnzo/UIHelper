@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 namespace Nevelson.UIHelper
@@ -16,7 +17,7 @@ namespace Nevelson.UIHelper
 
         public void UIReset()
         {
-            SelectTab(tabs[startingTab].button);
+            SelectTab(tabs[startingTab].button, true);
         }
 
         public void OnTabEnter(TabButton button)
@@ -53,7 +54,7 @@ namespace Nevelson.UIHelper
 
         public void OnTabSelected(TabButton button)
         {
-            SelectTab(button);
+            SelectTab(button, false);
             SetUIFocus();
         }
 
@@ -67,7 +68,7 @@ namespace Nevelson.UIHelper
             UIReset();
         }
 
-        void SelectTab(TabButton button)
+        void SelectTab(TabButton button, bool initialize)
         {
             if (selectedTab != null)
             {
@@ -95,14 +96,57 @@ namespace Nevelson.UIHelper
 
             for (int i = 0; i < tabs.Length; i++)
             {
-                if (i == index)
+                if (tabs[i].tabPage.activeInHierarchy)
                 {
-                    tabs[i].tabPage.SetActive(true);
-                    currentTab = tabs[i];
+                    Debug.Log($"Disabling tab {tabs[i].tabPage.name}");
+
+                    if (initialize)
+                    {
+                        tabs[i].tabPage.SetActive(false);
+                    }
+                    else
+                    {
+                        if (tabs[i].animateDisableTab.GetPersistentEventCount() == 0)
+                        {
+                            tabs[i].tabPage.SetActive(false);
+                        }
+                        else if (tabs[i].animateDisableTab.GetPersistentEventCount() == 1)
+                        {
+                            tabs[i].animateDisableTab.Invoke(() => tabs[i].tabPage.SetActive(false));
+                        }
+                        else
+                        {
+                            Debug.LogError($"Animate tab hide does not support more than one event");
+                        }
+                    }
+
+                    break;
+                }
+
+                Debug.Log($"Enabling tab {tabs[index].tabPage.name}");
+                if (initialize)
+                {
+                    tabs[index].tabPage.SetActive(true);
                 }
                 else
                 {
-                    tabs[i].tabPage.SetActive(false);
+                    if (tabs[index].animateAppearTab.GetPersistentEventCount() == 0)
+                    {
+                        tabs[index].tabPage.SetActive(true);
+                        currentTab = tabs[index];
+                    }
+                    else if (tabs[index].animateAppearTab.GetPersistentEventCount() == 1)
+                    {
+                        tabs[index].animateAppearTab.Invoke(() =>
+                        {
+                            tabs[index].tabPage.SetActive(true);
+                            currentTab = tabs[index];
+                        });
+                    }
+                    else
+                    {
+                        Debug.LogError($"Animate appear tab does not support more than one event");
+                    }
                 }
             }
         }
@@ -114,5 +158,7 @@ namespace Nevelson.UIHelper
         public TabButton button;
         public GameObject tabPage;
         public GameObject setFocusToGameObject;
+        public UnityEvent<Action> animateAppearTab;
+        public UnityEvent<Action> animateDisableTab;
     }
 }
