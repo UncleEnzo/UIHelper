@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -10,8 +11,10 @@ namespace Nevelson.UIHelper
     public abstract class UIScreenBase : ButtonsBase, IScreen, ISelectables, ISetUIFocus
     {
         [SerializeField] GameObject focusTargetOnDisplay;
-        [SerializeField] UnityEvent onHide;
+        [SerializeField] UnityEvent<Action> animateScreenDisplay;
         [SerializeField] UnityEvent onDisplay;
+        [SerializeField] UnityEvent<Action> animateScreenHide;
+        [SerializeField] UnityEvent onHide;
 
         EventSystem unityEventSystem;
         CanvasGroup _canvasGroup;
@@ -34,39 +37,41 @@ namespace Nevelson.UIHelper
             }
         }
 
-        public void BeforeDisplay()
+        public virtual void Display()
         {
             if (isScreenDisplayed)
             {
                 Debug.LogError($"Attempting to display screen that is already displayed {gameObject.name}");
                 return;
             }
-            UnlockSelectables();
+            Debug.Log($"Calling Display on {gameObject.name}");
             onDisplay?.Invoke();
-        }
-
-        public virtual void Display()
-        {
-            if (isScreenDisplayed)
-            {
-                return;
-            }
             CanvasGroup.alpha = 1f;
             CanvasGroup.interactable = true;
             CanvasGroup.blocksRaycasts = true;
-        }
-
-        public void AfterDisplay()
-        {
-            if (isScreenDisplayed)
+            if (animateScreenDisplay.GetPersistentEventCount() == 0)
             {
-                return;
+                UnlockSelectables();
+                SetUIFocus();
+                isScreenDisplayed = true;
             }
-            SetUIFocus();
-            isScreenDisplayed = true;
+            else if (animateScreenDisplay.GetPersistentEventCount() == 1)
+            {
+                animateScreenDisplay.Invoke(() =>
+                {
+                    Debug.Log("Unlocking Screen");
+                    UnlockSelectables();
+                    SetUIFocus();
+                    isScreenDisplayed = true;
+                });
+            }
+            else
+            {
+                Debug.LogError($"Animate screen display does not support more than one ");
+            }
         }
 
-        public void BeforeHide()
+        public virtual void Hide()
         {
             if (!isScreenDisplayed)
             {
@@ -93,28 +98,28 @@ namespace Nevelson.UIHelper
             }
 
             LockSelectables();
-        }
 
-        public virtual void Hide()
-        {
-            if (!isScreenDisplayed)
+            if (animateScreenHide.GetPersistentEventCount() == 0)
             {
-                return;
+                CanvasGroup.alpha = 0f;
+                CanvasGroup.interactable = false;
+                CanvasGroup.blocksRaycasts = false;
+                isScreenDisplayed = false;
             }
-
-            CanvasGroup.alpha = 0f;
-            CanvasGroup.interactable = false;
-            CanvasGroup.blocksRaycasts = false;
-        }
-
-        public void AfterHide()
-        {
-            if (!isScreenDisplayed)
+            else if (animateScreenHide.GetPersistentEventCount() == 1)
             {
-                return;
+                animateScreenHide.Invoke(() =>
+                {
+                    CanvasGroup.alpha = 0f;
+                    CanvasGroup.interactable = false;
+                    CanvasGroup.blocksRaycasts = false;
+                    isScreenDisplayed = false;
+                });
             }
-
-            isScreenDisplayed = false;
+            else
+            {
+                Debug.LogError($"Animate screen hide does not support more than one ");
+            }
         }
 
         public void LockSelectables()
@@ -146,7 +151,7 @@ namespace Nevelson.UIHelper
 
         public void SetUIFocus()
         {
-            Debug.Log($"{gameObject.name} is calling SetUIFocus. Is using controller for screen set to {isUsingController}");
+            //Debug.Log($"{gameObject.name} is calling SetUIFocus. Is using controller for screen set to {isUsingController}");
             foreach (var manager in iPopupManagers)
             {
                 manager.SetUsingController(isUsingController);
