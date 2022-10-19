@@ -64,16 +64,22 @@ namespace Nevelson.UIHelper
         void Init()
         {
             audioSource = GetComponent<AudioSource>();
-            foreach (var selectable in GetComponentsInChildren<Selectable>())
-            {
-                UIAudio newComponent = selectable.gameObject.AddComponent<UIAudio>();
-                newComponent.Init(audioSource, hoverSound, pressedSound);
-            }
-            uiScreens = GetComponentsInChildren<UIScreenBase>();
+            uiScreens = GetComponentsInChildren<UIScreenBase>(true);
             if (uiScreens == null || uiScreens.Length == 0)
             {
                 Debug.LogError("Could not find any UIScreens on canvas");
                 return;
+            }
+            foreach (var uiScreen in uiScreens)
+            {
+                foreach (var selectable in uiScreen.GetComponentsInChildren<Selectable>(true))
+                {
+                    Debug.Log(selectable.gameObject.name);
+                    UIAudio uiAudio = selectable.gameObject.AddComponent<UIAudio>();
+                    uiAudio.Init(audioSource, hoverSound, pressedSound);
+                    UICancelHandler uiCancel = selectable.gameObject.AddComponent<UICancelHandler>();
+                    uiCancel.Init(uiScreen);
+                }
             }
         }
 

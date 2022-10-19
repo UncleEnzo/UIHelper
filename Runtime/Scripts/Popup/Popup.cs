@@ -75,7 +75,7 @@ namespace Nevelson.UIHelper
                 return;
             }
             selectables = new Dictionary<Selectable, Navigation>();
-            Selectable[] selectableUIElements = GetComponentsInChildren<Selectable>();
+            Selectable[] selectableUIElements = GetComponentsInChildren<Selectable>(true);
             foreach (var selectable in selectableUIElements)
             {
                 selectables.Add(selectable, selectable.navigation);

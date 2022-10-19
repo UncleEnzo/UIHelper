@@ -111,18 +111,8 @@ namespace Nevelson.UIHelper
                 return;
             }
 
-            //don't need for reset |       //popup.LockSelectables();
             popup.gameObject.SetActive(false);
             openPopups.Pop();
-            //if (openPopups.Count != 0)
-            //{
-            //    Popup previousPopup = openPopups.Peek();
-            //    previousPopup.UnlockSelectables();
-            //    previousPopup.SetUIFocus();
-            //    return;
-            //}
-            //uiScreen.UnlockSelectables();
-            //uiScreen.SetUIFocus();
         }
 
         void ClosePopup(Popup popup)
@@ -175,7 +165,7 @@ namespace Nevelson.UIHelper
 
         void Awake()
         {
-            foreach (var popup in GetComponentsInChildren<Popup>())
+            foreach (var popup in GetComponentsInChildren<Popup>(true))
             {
                 popup.Init(ClosePopup);
                 popup.gameObject.SetActive(false);

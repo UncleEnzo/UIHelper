@@ -57,7 +57,6 @@ namespace Nevelson.UIHelper
         public void OnTabSelected(TabButton button)
         {
             SelectTab(button, false);
-            SetUIFocus();
         }
 
         void Awake()
@@ -105,6 +104,7 @@ namespace Nevelson.UIHelper
                         tabs[i].tabPage.SetActive(false);
                         tabs[index].tabPage.SetActive(true);
                         currentTab = tabs[index];
+                        SetUIFocus();
                     }
                     else
                     {
@@ -113,6 +113,7 @@ namespace Nevelson.UIHelper
                             tabs[i].tabPage.SetActive(false);
                             tabs[index].tabPage.SetActive(true);
                             currentTab = tabs[index];
+                            SetUIFocus();
                         }
                         else if (animateDisableTab.GetPersistentEventCount() == 1)
                         {
@@ -126,6 +127,7 @@ namespace Nevelson.UIHelper
                                     animateAppearTab.Invoke(() =>
                                     {
                                         uiScreen.UnlockSelectables();
+                                        SetUIFocus();
                                     },
                                     tabs[index].tabPage);
                                 },

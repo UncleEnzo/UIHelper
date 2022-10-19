@@ -32,7 +32,7 @@ namespace Nevelson.UIHelper
                 return;
             }
 
-            Debug.Log($"Mouse Click On Tab Button {gameObject.name}");
+            //Debug.Log($"Mouse Click On Tab Button {gameObject.name}");
             TabGroup.OnTabSelected(this);
         }
 
@@ -42,7 +42,7 @@ namespace Nevelson.UIHelper
             {
                 return;
             }
-            Debug.Log($"Mouse Hover Over Tab Button {gameObject.name}");
+            //Debug.Log($"Mouse Hover Over Tab Button {gameObject.name}");
             TabGroup.OnTabEnter(this);
         }
 
@@ -52,7 +52,7 @@ namespace Nevelson.UIHelper
             {
                 return;
             }
-            Debug.Log($"Mouse Exit Tab Button {gameObject.name}");
+            //Debug.Log($"Mouse Exit Tab Button {gameObject.name}");
             TabGroup.OnTabExit(this);
         }
 
@@ -62,7 +62,7 @@ namespace Nevelson.UIHelper
             {
                 return;
             }
-            Debug.Log($"Select On Tab Button {gameObject.name}");
+            //Debug.Log($"Select On Tab Button {gameObject.name}");
             TabGroup.OnTabSelected(this);
         }
 
@@ -72,7 +72,7 @@ namespace Nevelson.UIHelper
             {
                 return;
             }
-            Debug.Log($"Select Hover Over Tab Button {gameObject.name}");
+            //Debug.Log($"Select Hover Over Tab Button {gameObject.name}");
             TabGroup.OnTabEnter(this);
         }
 
@@ -82,7 +82,7 @@ namespace Nevelson.UIHelper
             {
                 return;
             }
-            Debug.Log($"Select Exit Tab Button {gameObject.name}");
+            //Debug.Log($"Select Exit Tab Button {gameObject.name}");
             TabGroup.OnTabExit(this);
         }
 

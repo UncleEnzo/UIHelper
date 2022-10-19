@@ -6,6 +6,7 @@ namespace Nevelson.UIHelper
 {
     public abstract class ButtonsBase : MonoBehaviour
     {
+        [SerializeField] UIScreenBase backButtonScreen;
         IManageScreens _iManageScreens;
         IManageScreens IManageScreens
         {
@@ -18,6 +19,17 @@ namespace Nevelson.UIHelper
                 }
                 return _iManageScreens;
             }
+        }
+
+        public void OnClick_ScreenBack()
+        {
+            if (backButtonScreen == null)
+            {
+                Debug.Log("Back button pressed but doing nothing!");
+                return;
+            }
+            Debug.Log($"Back button pressed from screen {gameObject.name}. Changing to: {backButtonScreen.gameObject.name}!");
+            OnClick_ChangeUIScreen(backButtonScreen);
         }
 
         public void OnClick_ChangeUIScreen(UIScreenBase toUIScreen)
@@ -51,31 +63,6 @@ namespace Nevelson.UIHelper
         {
             Debug.Log("Quitting Application");
             Application.Quit();
-        }
-
-        //below will be the button listeners for controllers
-
-
-        /// <summary>
-        /// Function for listening to controller input to return to a previous screen
-        /// </summary>
-        protected virtual void BackButton()
-        {
-            //if(!isScreenDisplayed)
-            //{
-            //    return;
-            //}
-
-            //HOW TO I MAKE THIS INDEPENDENT OF WHAT CONTROLLER SYSTEM THEY USE
-            //if (playerOne.GetButtonDown("Back") || playerTwo.GetButtonDown("Back"))
-            //{
-            //    if (previousScreen == null)
-            //    {
-            //        Debug.Log("No back button target");
-            //        return;
-            //    }
-            //    uiManager.ScreenDone(previousScreen);
-            //}
         }
     }
 }

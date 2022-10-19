@@ -52,7 +52,6 @@ namespace Nevelson.UIHelper
                 return;
             }
 
-            onDisplay?.Invoke();
             DisplayScreenCanvasGroup();
             if (animateScreenDisplay.GetPersistentEventCount() == 0)
             {
@@ -74,6 +73,7 @@ namespace Nevelson.UIHelper
             {
                 Debug.LogError($"Animate screen display does not support more than one event");
             }
+            onDisplay?.Invoke();
         }
 
         public virtual void Hide()
@@ -172,8 +172,8 @@ namespace Nevelson.UIHelper
         protected virtual void Awake()
         {
             navigationNone.mode = Navigation.Mode.None;
-            iPopupManagers = GetComponentsInChildren<PopupManager>();
-            iTabManagers = GetComponentsInChildren<TabManager>();
+            iPopupManagers = GetComponentsInChildren<PopupManager>(true);
+            iTabManagers = GetComponentsInChildren<TabManager>(true);
             if (iPopupManagers.Length > 1)
             {
                 Debug.LogError($"Screen {gameObject.name} has more than 1 popupmanager.  if you need multiple popups, use the same manager");
@@ -198,7 +198,7 @@ namespace Nevelson.UIHelper
                 return;
             }
             selectables = new Dictionary<Selectable, Navigation>();
-            Selectable[] selectableUIElements = GetComponentsInChildren<Selectable>();
+            Selectable[] selectableUIElements = GetComponentsInChildren<Selectable>(true);
             foreach (var selectable in selectableUIElements)
             {
                 selectables.Add(selectable, selectable.navigation);
