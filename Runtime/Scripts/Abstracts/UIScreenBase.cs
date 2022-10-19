@@ -11,9 +11,9 @@ namespace Nevelson.UIHelper
     public abstract class UIScreenBase : ButtonsBase, IScreen, ISelectables, ISetUIFocus
     {
         [SerializeField] GameObject focusTargetOnDisplay;
-        [SerializeField] UnityEvent<Action> animateScreenDisplay;
+        [SerializeField] UnityEvent<Action, GameObject> animateScreenDisplay;
         [SerializeField] UnityEvent onDisplay;
-        [SerializeField] UnityEvent<Action> animateScreenHide;
+        [SerializeField] UnityEvent<Action, GameObject> animateScreenHide;
         [SerializeField] UnityEvent onHide;
 
         EventSystem unityEventSystem;
@@ -67,7 +67,8 @@ namespace Nevelson.UIHelper
                     UnlockSelectables();
                     SetUIFocus();
                     isScreenDisplayed = true;
-                });
+                },
+                this.gameObject);
             }
             else
             {
@@ -93,7 +94,7 @@ namespace Nevelson.UIHelper
             }
             else if (animateScreenHide.GetPersistentEventCount() == 1)
             {
-                animateScreenHide.Invoke(() => HideScreenCanvasGroup());
+                animateScreenHide.Invoke(() => HideScreenCanvasGroup(), this.gameObject);
             }
             else
             {

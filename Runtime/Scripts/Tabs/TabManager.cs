@@ -7,9 +7,11 @@ namespace Nevelson.UIHelper
 {
     public class TabManager : MonoBehaviour, IUIManager, ISetUIFocus
     {
+        [SerializeField] UIScreenBase uiScreen;
         [SerializeField] int startingTab;
         [SerializeField] Tab[] tabs;
-
+        [SerializeField] UnityEvent<Action, GameObject> animateAppearTab;
+        [SerializeField] UnityEvent<Action, GameObject> animateDisableTab;
         Tab currentTab;
         EventSystem unityEventSystem;
         TabButton selectedTab;
@@ -58,7 +60,7 @@ namespace Nevelson.UIHelper
             SetUIFocus();
         }
 
-        void Start()
+        void Awake()
         {
             unityEventSystem = EventSystem.current;
             foreach (var tab in tabs)
@@ -98,55 +100,45 @@ namespace Nevelson.UIHelper
             {
                 if (tabs[i].tabPage.activeInHierarchy)
                 {
-                    Debug.Log($"Disabling tab {tabs[i].tabPage.name}");
-
                     if (initialize)
                     {
                         tabs[i].tabPage.SetActive(false);
+                        tabs[index].tabPage.SetActive(true);
+                        currentTab = tabs[index];
                     }
                     else
                     {
-                        if (tabs[i].animateDisableTab.GetPersistentEventCount() == 0)
+                        if (animateDisableTab.GetPersistentEventCount() == 0)
                         {
                             tabs[i].tabPage.SetActive(false);
+                            tabs[index].tabPage.SetActive(true);
+                            currentTab = tabs[index];
                         }
-                        else if (tabs[i].animateDisableTab.GetPersistentEventCount() == 1)
+                        else if (animateDisableTab.GetPersistentEventCount() == 1)
                         {
-                            tabs[i].animateDisableTab.Invoke(() => tabs[i].tabPage.SetActive(false));
+                            uiScreen.LockSelectables();
+                            animateDisableTab.Invoke(
+                                () =>
+                                {
+                                    tabs[i].tabPage.SetActive(false);
+                                    tabs[index].tabPage.SetActive(true);
+                                    currentTab = tabs[index];
+                                    animateAppearTab.Invoke(() =>
+                                    {
+                                        uiScreen.UnlockSelectables();
+                                    },
+                                    tabs[index].tabPage);
+                                },
+                                tabs[i].tabPage
+                            );
                         }
                         else
                         {
                             Debug.LogError($"Animate tab hide does not support more than one event");
+                            Debug.LogError($"Animate appear tab does not support more than one event");
                         }
                     }
-
                     break;
-                }
-
-                Debug.Log($"Enabling tab {tabs[index].tabPage.name}");
-                if (initialize)
-                {
-                    tabs[index].tabPage.SetActive(true);
-                }
-                else
-                {
-                    if (tabs[index].animateAppearTab.GetPersistentEventCount() == 0)
-                    {
-                        tabs[index].tabPage.SetActive(true);
-                        currentTab = tabs[index];
-                    }
-                    else if (tabs[index].animateAppearTab.GetPersistentEventCount() == 1)
-                    {
-                        tabs[index].animateAppearTab.Invoke(() =>
-                        {
-                            tabs[index].tabPage.SetActive(true);
-                            currentTab = tabs[index];
-                        });
-                    }
-                    else
-                    {
-                        Debug.LogError($"Animate appear tab does not support more than one event");
-                    }
                 }
             }
         }
@@ -158,7 +150,5 @@ namespace Nevelson.UIHelper
         public TabButton button;
         public GameObject tabPage;
         public GameObject setFocusToGameObject;
-        public UnityEvent<Action> animateAppearTab;
-        public UnityEvent<Action> animateDisableTab;
     }
 }

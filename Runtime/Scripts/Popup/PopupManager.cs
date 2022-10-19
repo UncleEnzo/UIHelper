@@ -1,11 +1,15 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Nevelson.UIHelper
 {
     public class PopupManager : MonoBehaviour, IUIManager, ISetUIFocus
     {
         [SerializeField] UIScreen uiScreen;
+        [SerializeField] UnityEvent<Action, GameObject> animateAppearPopup;
+        [SerializeField] UnityEvent<Action, GameObject> animateClosePopup;
         Stack<Popup> openPopups = new Stack<Popup>();
 
         public void SetUsingController(bool isUsingController)
@@ -50,11 +54,30 @@ namespace Nevelson.UIHelper
                 previousPopup.LockSelectables();
             }
 
-            //TODO Allow for pop animation and stuff
             popup.gameObject.SetActive(true);
-            popup.UnlockSelectables();
-            popup.SetUIFocus();
-            openPopups.Push(popup);
+
+            if (animateAppearPopup.GetPersistentEventCount() == 0)
+            {
+                popup.UnlockSelectables();
+                popup.SetUIFocus();
+                openPopups.Push(popup);
+            }
+            else if (animateAppearPopup.GetPersistentEventCount() == 1)
+            {
+                animateAppearPopup.Invoke(
+                    () =>
+                    {
+                        popup.UnlockSelectables();
+                        popup.SetUIFocus();
+                        openPopups.Push(popup);
+                    },
+                    popup.gameObject
+                );
+            }
+            else
+            {
+                Debug.LogError($"Animate popup appear does not support more than one event");
+            }
         }
 
         public void UIReset()
@@ -65,13 +88,41 @@ namespace Nevelson.UIHelper
             {
                 Popup popup = openPopups.Peek();
                 //Debug.Log($"Resetting popup {popup.gameObject.name}");
-                popup.OnClick_ClosePopup();
+                ResetPopup(popup);
                 amount++;
                 if (amount >= maxAmount)
                 {
                     Debug.LogError($"Max amount of popups to close exceeded max amount: {maxAmount}");
                 }
             }
+        }
+
+        void ResetPopup(Popup popup)
+        {
+            if (!openPopups.Contains(popup))
+            {
+                Debug.LogError($"The popup you are trying to close {popup.gameObject.name} is not open");
+                return;
+            }
+
+            if (popup != openPopups.Peek())
+            {
+                Debug.LogError($"The popup you are trying to close {popup.gameObject.name} is not the active popup");
+                return;
+            }
+
+            //don't need for reset |       //popup.LockSelectables();
+            popup.gameObject.SetActive(false);
+            openPopups.Pop();
+            //if (openPopups.Count != 0)
+            //{
+            //    Popup previousPopup = openPopups.Peek();
+            //    previousPopup.UnlockSelectables();
+            //    previousPopup.SetUIFocus();
+            //    return;
+            //}
+            //uiScreen.UnlockSelectables();
+            //uiScreen.SetUIFocus();
         }
 
         void ClosePopup(Popup popup)
@@ -89,17 +140,37 @@ namespace Nevelson.UIHelper
             }
 
             popup.LockSelectables();
-            popup.gameObject.SetActive(false);
-            openPopups.Pop();
-            if (openPopups.Count != 0)
+
+            void CleanUpPopup()
             {
-                Popup previousPopup = openPopups.Peek();
-                previousPopup.UnlockSelectables();
-                previousPopup.SetUIFocus();
-                return;
+                popup.gameObject.SetActive(false);
+                openPopups.Pop();
+                if (openPopups.Count != 0)
+                {
+                    Popup previousPopup = openPopups.Peek();
+                    previousPopup.UnlockSelectables();
+                    previousPopup.SetUIFocus();
+                    return;
+                }
+                uiScreen.UnlockSelectables();
+                uiScreen.SetUIFocus();
             }
-            uiScreen.UnlockSelectables();
-            uiScreen.SetUIFocus();
+
+            if (animateClosePopup.GetPersistentEventCount() == 0)
+            {
+                CleanUpPopup();
+            }
+            else if (animateClosePopup.GetPersistentEventCount() == 1)
+            {
+                animateClosePopup.Invoke(
+                    () => CleanUpPopup(),
+                    popup.gameObject
+                );
+            }
+            else
+            {
+                Debug.LogError($"Animate popup close does not support more than one event");
+            }
         }
 
         void Awake()
