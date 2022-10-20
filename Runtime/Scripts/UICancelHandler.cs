@@ -7,13 +7,15 @@ namespace Nevelson.UIHelper
     {
         UIScreenBase uiScreen;
         Popup popup;
+        TabManager tabManager;
         bool Dropdown { get => GetComponent<Dropdown>() == null; }
         bool dropdownIsOpen;
 
-        public void Init(UIScreenBase uiScreen, Popup popup = null)
+        public void Init(UIScreenBase uiScreen, Popup popup, TabManager tabManager)
         {
             this.uiScreen = uiScreen;
             this.popup = popup;
+            this.tabManager = tabManager;
         }
 
         public override void OnCancel(BaseEventData eventData)
@@ -29,6 +31,14 @@ namespace Nevelson.UIHelper
             {
                 popup.OnClick_ClosePopup();
                 return;
+            }
+
+            if (tabManager != null)
+            {
+                if (tabManager.UICancel())
+                {
+                    return;
+                }
             }
 
             uiScreen.OnClick_ScreenBack();

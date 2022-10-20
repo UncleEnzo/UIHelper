@@ -16,7 +16,6 @@ namespace Nevelson.UIHelper
         [SerializeField] UnityEvent<Action, GameObject> animateScreenHide;
         [SerializeField] UnityEvent onHide;
 
-        EventSystem unityEventSystem;
         CanvasGroup _canvasGroup;
         Dictionary<Selectable, Navigation> selectables;
         Navigation navigationNone = new Navigation();
@@ -140,7 +139,7 @@ namespace Nevelson.UIHelper
 
         public void SetUIFocus()
         {
-            //Debug.Log($"{gameObject.name} is calling SetUIFocus. Is using controller for screen set to {isUsingController}");
+            Debug.Log($"{gameObject.name} is calling SetUIFocus. Is using controller for screen set to {isUsingController}");
             foreach (var manager in iPopupManagers)
             {
                 manager.SetUsingController(isUsingController);
@@ -153,7 +152,7 @@ namespace Nevelson.UIHelper
 
             if (!isUsingController)
             {
-                unityEventSystem.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(null);
                 return;
             }
 
@@ -163,7 +162,7 @@ namespace Nevelson.UIHelper
                 return;
             }
 
-            unityEventSystem.SetSelectedGameObject(focusTargetOnDisplay);
+            EventSystem.current.SetSelectedGameObject(focusTargetOnDisplay);
 
             //if there is an active tab, sets the focus to that
             foreach (var manager in iTabManagers)
@@ -191,11 +190,6 @@ namespace Nevelson.UIHelper
             {
                 Debug.LogError($"Screen {gameObject.name} has more than 1 popupmanager.  if you need multiple tabs, use the same manager");
             }
-        }
-
-        protected virtual void Start()
-        {
-            unityEventSystem = EventSystem.current;
         }
 
         protected virtual void Update() { }

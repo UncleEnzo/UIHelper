@@ -10,7 +10,6 @@ namespace Nevelson.UIHelper
     {
         [SerializeField] GameObject focusTargetOnDisplay;
         Dictionary<Selectable, Navigation> selectables;
-        EventSystem unityEventSystem;
         Action<Popup> closePopup;
         Navigation navigationNone = new Navigation();
         bool isUsingController;
@@ -56,7 +55,7 @@ namespace Nevelson.UIHelper
         {
             if (!isUsingController)
             {
-                unityEventSystem.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(null);
             }
 
             if (focusTargetOnDisplay == null)
@@ -65,7 +64,7 @@ namespace Nevelson.UIHelper
                 return;
             }
 
-            unityEventSystem.SetSelectedGameObject(focusTargetOnDisplay);
+            EventSystem.current.SetSelectedGameObject(focusTargetOnDisplay);
         }
 
         void InitSelectables()
@@ -85,7 +84,6 @@ namespace Nevelson.UIHelper
         void Awake()
         {
             navigationNone.mode = Navigation.Mode.None;
-            unityEventSystem = EventSystem.current;
         }
     }
 }

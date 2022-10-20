@@ -85,12 +85,29 @@ namespace Nevelson.UIHelper
                     foreach (Selectable popupSelectable in popup.GetComponentsInChildren<Selectable>(true))
                     {
                         UICancelHandler uiCancel = popupSelectable.gameObject.AddComponent<UICancelHandler>();
-                        uiCancel.Init(uiScreen, popup);
+                        uiCancel.Init(uiScreen, popup, null);
                     }
                 }
 
-                //foreach tab... something
+                foreach (TabManager tabManager in uiScreen.GetComponentsInChildren<TabManager>(true))
+                {
+                    foreach (Tab tab in tabManager.Tabs)
+                    {
+                        Selectable tabButton = tab.button.GetComponent<Selectable>();
+                        UICancelHandler uiCancel = tabButton.gameObject.AddComponent<UICancelHandler>();
+                        uiCancel.Init(uiScreen, null, tabManager);
 
+                        foreach (Selectable selectable in tab.tabPage.GetComponentsInChildren<Selectable>())
+                        {
+                            //Need to try/get in case the tabButton is in the tab page
+                            if (!selectable.gameObject.TryGetComponent(out UICancelHandler contains))
+                            {
+                                UICancelHandler uiCancelPage = selectable.gameObject.AddComponent<UICancelHandler>();
+                                uiCancelPage.Init(uiScreen, null, tabManager);
+                            }
+                        }
+                    }
+                }
 
                 //Finally iterate through all selectables and if they're still missing a UICanceller slap it on here
                 foreach (Selectable selectable in uiScreen.GetComponentsInChildren<Selectable>(true))
@@ -101,7 +118,7 @@ namespace Nevelson.UIHelper
                     if (!selectable.gameObject.TryGetComponent(out UICancelHandler contains))
                     {
                         UICancelHandler uiCancel = selectable.gameObject.AddComponent<UICancelHandler>();
-                        uiCancel.Init(uiScreen);
+                        uiCancel.Init(uiScreen, null, null);
                     }
                 }
             }

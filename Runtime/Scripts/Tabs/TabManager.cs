@@ -10,16 +10,30 @@ namespace Nevelson.UIHelper
         [SerializeField] UIScreenBase uiScreen;
         [SerializeField] int startingTab;
         [SerializeField] Tab[] tabs;
+        [SerializeField] UnityEvent<GameObject> animationTabReset;
         [SerializeField] UnityEvent<Action, GameObject> animateAppearTab;
         [SerializeField] UnityEvent<Action, GameObject> animateDisableTab;
         Tab currentTab;
-        EventSystem unityEventSystem;
         TabButton selectedTab;
         bool isUsingController = false;
+
+        public Tab[] Tabs { get => tabs; }
 
         public void UIReset()
         {
             SelectTab(tabs[startingTab].button, true);
+            //this could in theory be an animation as long as it resets to the correct tab...
+            animationTabReset?.Invoke(currentTab.tabPage);
+        }
+
+        public bool UICancel()
+        {
+            if (currentTab.uiCancelTabTarget == null)
+            {
+                return false;
+            }
+            SelectTab(currentTab.uiCancelTabTarget, false);
+            return true;
         }
 
         public void OnTabEnter(TabButton button)
@@ -41,7 +55,7 @@ namespace Nevelson.UIHelper
         {
             if (!isUsingController)
             {
-                unityEventSystem.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(null);
                 return;
             }
 
@@ -51,7 +65,7 @@ namespace Nevelson.UIHelper
                 return;
             }
 
-            unityEventSystem.SetSelectedGameObject(currentTab.setFocusToGameObject);
+            EventSystem.current.SetSelectedGameObject(currentTab.setFocusToGameObject);
         }
 
         public void OnTabSelected(TabButton button)
@@ -61,7 +75,6 @@ namespace Nevelson.UIHelper
 
         void Awake()
         {
-            unityEventSystem = EventSystem.current;
             foreach (var tab in tabs)
             {
                 tab.button.TabGroup = this;
@@ -147,10 +160,11 @@ namespace Nevelson.UIHelper
     }
 
     [Serializable]
-    internal class Tab
+    public class Tab
     {
         public TabButton button;
         public GameObject tabPage;
         public GameObject setFocusToGameObject;
+        public TabButton uiCancelTabTarget;
     }
 }
