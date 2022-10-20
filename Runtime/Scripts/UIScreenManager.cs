@@ -77,14 +77,32 @@ namespace Nevelson.UIHelper
                 Debug.LogError("Could not find any UIScreens on canvas");
                 return;
             }
-            foreach (var uiScreen in uiScreens)
+            foreach (UIScreenBase uiScreen in uiScreens)
             {
-                foreach (var selectable in uiScreen.GetComponentsInChildren<Selectable>(true))
+                //first find all popups and give their selectables the popup reference
+                foreach (Popup popup in uiScreen.GetComponentsInChildren<Popup>(true))
+                {
+                    foreach (Selectable popupSelectable in popup.GetComponentsInChildren<Selectable>(true))
+                    {
+                        UICancelHandler uiCancel = popupSelectable.gameObject.AddComponent<UICancelHandler>();
+                        uiCancel.Init(uiScreen, popup);
+                    }
+                }
+
+                //foreach tab... something
+
+
+                //Finally iterate through all selectables and if they're still missing a UICanceller slap it on here
+                foreach (Selectable selectable in uiScreen.GetComponentsInChildren<Selectable>(true))
                 {
                     UIAudio uiAudio = selectable.gameObject.AddComponent<UIAudio>();
                     uiAudio.Init(audioSource, hoverSound, pressedSound);
-                    UICancelHandler uiCancel = selectable.gameObject.AddComponent<UICancelHandler>();
-                    uiCancel.Init(uiScreen);
+
+                    if (!selectable.gameObject.TryGetComponent(out UICancelHandler contains))
+                    {
+                        UICancelHandler uiCancel = selectable.gameObject.AddComponent<UICancelHandler>();
+                        uiCancel.Init(uiScreen);
+                    }
                 }
             }
         }
