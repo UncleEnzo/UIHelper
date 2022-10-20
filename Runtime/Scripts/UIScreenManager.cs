@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -36,13 +37,19 @@ namespace Nevelson.UIHelper
                 return;
             }
 
-            IScreen currentIScreen = currentScreen.GetComponent<IScreen>();
-            currentIScreen.Hide();
+            StartCoroutine(HideThenDisplayCo(currentScreen, nextScreen));
+        }
 
-            IScreen nextIScreen = nextScreen.GetComponent<IScreen>();
-            nextIScreen.Display();
+        IEnumerator HideThenDisplayCo(UIScreenBase _currentScreen, UIScreenBase _nextScreen)
+        {
+            _currentScreen.Hide();
+            while (_currentScreen.IsScreenDisplayed)
+            {
+                yield return null;
+            }
 
-            currentScreen = nextScreen;
+            _nextScreen.Display();
+            currentScreen = _nextScreen;
         }
 
         void Start()
@@ -74,7 +81,6 @@ namespace Nevelson.UIHelper
             {
                 foreach (var selectable in uiScreen.GetComponentsInChildren<Selectable>(true))
                 {
-                    Debug.Log(selectable.gameObject.name);
                     UIAudio uiAudio = selectable.gameObject.AddComponent<UIAudio>();
                     uiAudio.Init(audioSource, hoverSound, pressedSound);
                     UICancelHandler uiCancel = selectable.gameObject.AddComponent<UICancelHandler>();

@@ -23,7 +23,7 @@ namespace Nevelson.UIHelper
         PopupManager[] iPopupManagers;
         TabManager[] iTabManagers;
         bool isUsingController = false;
-        bool isScreenDisplayed = true;
+        public bool IsScreenDisplayed { get; private set; } = true;
 
         CanvasGroup CanvasGroup
         {
@@ -46,7 +46,7 @@ namespace Nevelson.UIHelper
 
         public virtual void Display()
         {
-            if (isScreenDisplayed)
+            if (IsScreenDisplayed)
             {
                 Debug.LogError($"Attempting to display screen that is already displayed {gameObject.name}");
                 return;
@@ -57,15 +57,17 @@ namespace Nevelson.UIHelper
             {
                 UnlockSelectables();
                 SetUIFocus();
-                isScreenDisplayed = true;
+                IsScreenDisplayed = true;
             }
             else if (animateScreenDisplay.GetPersistentEventCount() == 1)
             {
+                isLockedForAnimation = true;
                 animateScreenDisplay.Invoke(() =>
                 {
                     UnlockSelectables();
                     SetUIFocus();
-                    isScreenDisplayed = true;
+                    IsScreenDisplayed = true;
+                    isLockedForAnimation = false;
                 },
                 this.gameObject);
             }
@@ -78,7 +80,7 @@ namespace Nevelson.UIHelper
 
         public virtual void Hide()
         {
-            if (!isScreenDisplayed)
+            if (!IsScreenDisplayed)
             {
                 Debug.LogError($"Attempting to hide screen that is already hidden {gameObject.name}");
                 return;
@@ -94,7 +96,14 @@ namespace Nevelson.UIHelper
             }
             else if (animateScreenHide.GetPersistentEventCount() == 1)
             {
-                animateScreenHide.Invoke(() => HideScreenCanvasGroup(), this.gameObject);
+                isLockedForAnimation = true;
+                animateScreenHide.Invoke(() =>
+                {
+                    HideScreenCanvasGroup();
+                    isLockedForAnimation = false;
+                },
+                gameObject
+                );
             }
             else
             {
@@ -238,7 +247,7 @@ namespace Nevelson.UIHelper
             CanvasGroup.alpha = 0f;
             CanvasGroup.interactable = false;
             CanvasGroup.blocksRaycasts = false;
-            isScreenDisplayed = false;
+            IsScreenDisplayed = false;
         }
     }
 }
