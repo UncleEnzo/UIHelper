@@ -139,7 +139,7 @@ namespace Nevelson.UIHelper
 
         public void SetUIFocus()
         {
-            Debug.Log($"{gameObject.name} is calling SetUIFocus. Is using controller for screen set to {isUsingController}");
+            //Debug.Log($"{gameObject.name} is calling SetUIFocus. Is using controller for screen set to {isUsingController}");
             foreach (var manager in iPopupManagers)
             {
                 manager.SetUsingController(isUsingController);
