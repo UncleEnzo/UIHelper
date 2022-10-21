@@ -54,7 +54,6 @@ namespace Nevelson.UIHelper
             {
                 if (exitTransitionOnAwake && i == (int)transitions)
                 {
-                    Debug.Log("This happened");
                     On_EndTransition();
                 }
             }
