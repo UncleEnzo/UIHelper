@@ -7,18 +7,6 @@ namespace Nevelson.UIHelper
 {
     public class UITransitioner : MonoBehaviour
     {
-        //make Start transition, End transition, and START-TO-END transition (last one is for in-scene stuff)
-        //Make this Transitions panel a prefab that you can add to the canvas
-        //Make enums for different transitions
-
-        //Use code to start the animations, NOT triggers like he recommends
-        //FullTransition() > this is for ingame stuff.
-
-
-        //Implementation:
-        //Can get called on start by default
-        //Can also invoke the functions in other events
-
         public enum Transitions { FADE, CIRCLE_WIPE }
         [SerializeField] Transitions transitions = Transitions.FADE;
         [SerializeField, Range(0, 1)] public float transitionSpeed = 1;
