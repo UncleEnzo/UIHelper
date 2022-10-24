@@ -2,7 +2,8 @@
     "name": "com.nevelson.uihelper",
     "rootNamespace": "",
     "references": [
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "Com.Nevelson.2DEssentialUtilities"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

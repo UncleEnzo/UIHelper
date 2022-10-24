@@ -1,15 +1,26 @@
+using Nevelson.Utils;
+using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Nevelson.UIHelper
 {
+    [Serializable]
+    public struct CanvasEventListener
+    {
+        [SerializeField] public GameEventSO gameEvent;
+        [SerializeField] public UnityEvent canvasResponse;
+    }
+
     [RequireComponent(typeof(AudioSource))]
     public class UIScreenManager : MonoBehaviour, IManageScreens
     {
         [SerializeField] bool isUsingController = false;
         [SerializeField] AudioClip hoverSound;
         [SerializeField] AudioClip pressedSound;
+        [SerializeField] CanvasEventListener[] canvasListeners;
 
         AudioSource audioSource;
         UIScreenBase[] uiScreens;
@@ -68,8 +79,21 @@ namespace Nevelson.UIHelper
             }
         }
 
+        void OnDestroy()
+        {
+            for (int i = 0; i < canvasListeners.Length; i++)
+            {
+                canvasListeners[i].gameEvent.OnEventRaised -= canvasListeners[i].canvasResponse.Invoke;
+            }
+        }
+
         void Init()
         {
+            for (int i = 0; i < canvasListeners.Length; i++)
+            {
+                canvasListeners[i].gameEvent.OnEventRaised += canvasListeners[i].canvasResponse.Invoke;
+            }
+
             audioSource = GetComponent<AudioSource>();
             uiScreens = GetComponentsInChildren<UIScreenBase>(true);
             if (uiScreens == null || uiScreens.Length == 0)
