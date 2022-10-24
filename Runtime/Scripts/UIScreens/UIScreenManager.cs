@@ -20,7 +20,7 @@ namespace Nevelson.UIHelper
         [SerializeField] bool isUsingController = false;
         [SerializeField] AudioClip hoverSound;
         [SerializeField] AudioClip pressedSound;
-        [SerializeField] CanvasEventListener[] canvasListeners;
+        [SerializeField] CanvasEventListener[] canvasListeners = new CanvasEventListener[0];
 
         AudioSource audioSource;
         UIScreenBase[] uiScreens;
