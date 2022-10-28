@@ -159,45 +159,6 @@ namespace Nevelson.UIHelper
             }
         }
 
-        void InitSelectables()
-        {
-            if (selectables != null)
-            {
-                return;
-            }
-
-            selectables = new Dictionary<Selectable, Navigation>();
-            Selectable[] selectableUIElements = GetComponentsInChildren<Selectable>(true);
-            foreach (var selectable in selectableUIElements)
-            {
-                selectables.Add(selectable, selectable.navigation);
-            }
-        }
-
-        void UpdateSelectables()
-        {
-            Debug.Log("Regenerating selectables dictionary");
-
-            //Clever Unity specific work around to deleting nulls in unity only
-            foreach (var key in selectables.Keys.ToArray())
-            {
-                if (key == null)
-                {
-                    selectables.Remove(key);
-                }
-            }
-
-            Selectable[] selectableUIElements = GetComponentsInChildren<Selectable>(true);
-            foreach (var selectable in selectableUIElements)
-            {
-                if (!selectables.ContainsKey(selectable))
-                {
-                    Debug.Log($"Adding new selectable: {selectable.gameObject.name}");
-                    selectables.Add(selectable, selectable.navigation);
-                }
-            }
-        }
-
         public void SetUsingController(bool isUsingController)
         {
             this.isUsingController = isUsingController;
@@ -259,6 +220,45 @@ namespace Nevelson.UIHelper
         }
 
         protected virtual void Update() { }
+
+        void InitSelectables()
+        {
+            if (selectables != null)
+            {
+                return;
+            }
+
+            selectables = new Dictionary<Selectable, Navigation>();
+            Selectable[] selectableUIElements = GetComponentsInChildren<Selectable>(true);
+            foreach (var selectable in selectableUIElements)
+            {
+                selectables.Add(selectable, selectable.navigation);
+            }
+        }
+
+        void UpdateSelectables()
+        {
+            Debug.Log("Regenerating selectables dictionary");
+
+            //Clever Unity specific work around to deleting nulls in unity only
+            foreach (var key in selectables.Keys.ToArray())
+            {
+                if (key == null)
+                {
+                    selectables.Remove(key);
+                }
+            }
+
+            Selectable[] selectableUIElements = GetComponentsInChildren<Selectable>(true);
+            foreach (var selectable in selectableUIElements)
+            {
+                if (!selectables.ContainsKey(selectable))
+                {
+                    Debug.Log($"Adding new selectable: {selectable.gameObject.name}");
+                    selectables.Add(selectable, selectable.navigation);
+                }
+            }
+        }
 
         void ResetUIManagers()
         {
