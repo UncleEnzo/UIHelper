@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -12,6 +13,10 @@ namespace Nevelson.UIHelper
         [SerializeField, Range(0, 1)] public float transitionSpeed = 1;
         [SerializeField] Color color = Color.black;
         [SerializeField] bool exitTransitionOnAwake;
+        [SerializeField] UnityEvent onStartTransitionBegin;
+        [SerializeField] UnityEvent onStartTransitionComplete;
+        [SerializeField] UnityEvent onExitTransitionBegin;
+        [SerializeField] UnityEvent onExitTransitionComplete;
 
         Animator animator;
         const string START_ANIM_STATE = "StartTransition";
@@ -32,19 +37,23 @@ namespace Nevelson.UIHelper
 
         public void On_StartTransition()
         {
+            onStartTransitionBegin?.Invoke();
             SetAnimator();
             animator.CrossFade(START_ANIM_STATE, 0);
+            StartCoroutine(AfterTransitionEventCo(onStartTransitionComplete));
         }
 
         public void On_EndTransition()
         {
+            onExitTransitionBegin?.Invoke();
             SetAnimator();
             animator.CrossFade(END_ANIM_STATE, 0);
+            StartCoroutine(AfterTransitionEventCo(onExitTransitionComplete));
         }
 
         public void On_FullTransition(float waitBetweenTransitions)
         {
-            StartCoroutine(WaitForAnimationCo(waitBetweenTransitions));
+            StartCoroutine(WaitForAnimationFullTransitionCo(waitBetweenTransitions));
         }
 
         void Start()
@@ -59,7 +68,17 @@ namespace Nevelson.UIHelper
             }
         }
 
-        IEnumerator WaitForAnimationCo(float waitBetweenTransitions)
+        IEnumerator AfterTransitionEventCo(UnityEvent uEvent)
+        {
+            yield return null;
+            while (!IsTransitionPlaying)
+            {
+                yield return null;
+            }
+            uEvent?.Invoke();
+        }
+
+        IEnumerator WaitForAnimationFullTransitionCo(float waitBetweenTransitions)
         {
             SetAnimator();
             On_StartTransition();
