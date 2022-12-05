@@ -136,8 +136,11 @@ namespace Nevelson.UIHelper
                 //Finally iterate through all selectables and if they're still missing a UICanceller slap it on here
                 foreach (Selectable selectable in uiScreen.GetComponentsInChildren<Selectable>(true))
                 {
-                    UIAudio uiAudio = selectable.gameObject.AddComponent<UIAudio>();
-                    uiAudio.Init(audioSource, hoverSound, pressedSound);
+                    if (!selectable.gameObject.TryGetComponent(out IgnoreUIAudio ignoreAudio))
+                    {
+                        UIAudio uiAudio = selectable.gameObject.AddComponent<UIAudio>();
+                        uiAudio.Init(audioSource, hoverSound, pressedSound);
+                    }
 
                     if (!selectable.gameObject.TryGetComponent(out UICancelHandler contains))
                     {
