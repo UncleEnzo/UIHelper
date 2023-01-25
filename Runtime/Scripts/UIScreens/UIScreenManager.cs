@@ -14,6 +14,13 @@ namespace Nevelson.UIHelper
         [SerializeField] public UnityEvent canvasResponse;
     }
 
+    [Serializable]
+    public struct CanvasStringChannelListener
+    {
+        [SerializeField] public StringGameEventSO stringGameEvent;
+        [SerializeField] public UnityEvent<string> canvasResponse;
+    }
+
     [RequireComponent(typeof(AudioSource))]
     public class UIScreenManager : MonoBehaviour, IManageScreens
     {
@@ -21,6 +28,7 @@ namespace Nevelson.UIHelper
         [SerializeField] AudioClip hoverSound;
         [SerializeField] AudioClip pressedSound;
         [SerializeField] CanvasEventListener[] canvasListeners = new CanvasEventListener[0];
+        [SerializeField] CanvasStringChannelListener[] stringCanvasListeners = new CanvasStringChannelListener[0];
 
         AudioSource audioSource;
         UIScreenBase[] uiScreens;
@@ -85,6 +93,11 @@ namespace Nevelson.UIHelper
             {
                 canvasListeners[i].gameEvent.OnEventRaised -= canvasListeners[i].canvasResponse.Invoke;
             }
+
+            for (int i = 0; i < stringCanvasListeners.Length; i++)
+            {
+                stringCanvasListeners[i].stringGameEvent.OnEventRaised -= stringCanvasListeners[i].canvasResponse.Invoke;
+            }
         }
 
         void Init()
@@ -92,6 +105,11 @@ namespace Nevelson.UIHelper
             for (int i = 0; i < canvasListeners.Length; i++)
             {
                 canvasListeners[i].gameEvent.OnEventRaised += canvasListeners[i].canvasResponse.Invoke;
+            }
+
+            for (int i = 0; i < stringCanvasListeners.Length; i++)
+            {
+                stringCanvasListeners[i].stringGameEvent.OnEventRaised += stringCanvasListeners[i].canvasResponse.Invoke;
             }
 
             audioSource = GetComponent<AudioSource>();
