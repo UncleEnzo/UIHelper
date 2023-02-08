@@ -29,7 +29,8 @@ namespace Nevelson.UIHelper
             InitSelectables();
             foreach (KeyValuePair<Selectable, Navigation> selectable in selectables)
             {
-                //Debug.Log($"Locking UI element: {selectable.Key.gameObject.name}");
+                Debug.Log($"Locking UI element: {selectable.Key.name}");
+                Debug.Log($"Locking UI element: {selectable.Key.gameObject.name}");
                 selectable.Key.interactable = false;
                 selectable.Key.navigation = navigationNone;
             }
