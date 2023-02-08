@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -58,19 +59,21 @@ namespace Nevelson.UIHelper
 
             if (animateAppearPopup.GetPersistentEventCount() == 0)
             {
-                //todo TESTING
-                popup.LockSelectables();
-                popup.UnlockSelectables();
-                popup.SetUIFocus();
-                openPopups.Push(popup);
+                IEnumerator coTest()
+                {
+                    yield return null;
+                    yield return null;
+                    popup.UnlockSelectables();
+                    popup.SetUIFocus();
+                    openPopups.Push(popup);
+                }
+                StartCoroutine(coTest());
             }
             else if (animateAppearPopup.GetPersistentEventCount() == 1)
             {
                 animateAppearPopup.Invoke(
                     () =>
                     {
-                        //todo TESTING
-                        popup.LockSelectables();
                         popup.UnlockSelectables();
                         popup.SetUIFocus();
                         openPopups.Push(popup);
