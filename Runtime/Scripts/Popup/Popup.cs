@@ -75,9 +75,24 @@ namespace Nevelson.UIHelper
             }
         }
 
+        void InitSelectables()
+        {
+            if (selectables != null)
+            {
+                return;
+            }
+
+            selectables = new Dictionary<Selectable, Navigation>();
+            Selectable[] selectableUIElements = GetComponentsInChildren<Selectable>(true);
+            foreach (var selectable in selectableUIElements)
+            {
+                selectables.Add(selectable, selectable.navigation);
+            }
+        }
+
         void UpdateSelectables()
         {
-            Debug.Log("Popup Regenerating selectables dictionary");
+            Debug.Log($"Popup Regenerating selectables dictionary");
 
             //Clever Unity specific work around to deleting nulls in unity only
             foreach (var key in selectables.Keys.ToArray())
@@ -118,20 +133,6 @@ namespace Nevelson.UIHelper
             }
 
             EventSystem.current.SetSelectedGameObject(focusTargetOnDisplay);
-        }
-
-        void InitSelectables()
-        {
-            if (selectables != null)
-            {
-                return;
-            }
-            selectables = new Dictionary<Selectable, Navigation>();
-            Selectable[] selectableUIElements = GetComponentsInChildren<Selectable>(true);
-            foreach (var selectable in selectableUIElements)
-            {
-                selectables.Add(selectable, selectable.navigation);
-            }
         }
 
         void Awake()

@@ -58,6 +58,8 @@ namespace Nevelson.UIHelper
 
             if (animateAppearPopup.GetPersistentEventCount() == 0)
             {
+                //todo TESTING
+                popup.LockSelectables();
                 popup.UnlockSelectables();
                 popup.SetUIFocus();
                 openPopups.Push(popup);
@@ -67,6 +69,8 @@ namespace Nevelson.UIHelper
                 animateAppearPopup.Invoke(
                     () =>
                     {
+                        //todo TESTING
+                        popup.LockSelectables();
                         popup.UnlockSelectables();
                         popup.SetUIFocus();
                         openPopups.Push(popup);
