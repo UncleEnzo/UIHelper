@@ -113,7 +113,7 @@ namespace Nevelson.UIHelper
 
         public void LockSelectables()
         {
-            Debug.Log("UIScreenBase Locking Selectables");
+            Debug.Log($"{gameObject.name} Locking Selectables");
             InitSelectables();
 
             bool failure = false;
@@ -138,7 +138,7 @@ namespace Nevelson.UIHelper
 
         public void UnlockSelectables()
         {
-            Debug.Log("UIScreenBase Unlocking Selectables");
+            Debug.Log($"{gameObject.name} Unlocking Selectables");
             InitSelectables();
 
             bool failure = false;
