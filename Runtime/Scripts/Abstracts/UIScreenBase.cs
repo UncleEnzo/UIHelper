@@ -213,10 +213,11 @@ namespace Nevelson.UIHelper
             {
                 Debug.LogError($"Screen {gameObject.name} has more than 1 popupmanager.  if you need multiple popups, use the same manager");
             }
-            if (iTabManagers.Length > 1)
-            {
-                Debug.LogError($"Screen {gameObject.name} has more than 1 popupmanager.  if you need multiple tabs, use the same manager");
-            }
+            //commenting this error out for now, doesn't seem to be an actual issue currently
+            //if (iTabManagers.Length > 1)
+            //{
+            //    Debug.LogError($"Screen {gameObject.name} has more than 1 popupmanager.  if you need multiple tabs, use the same manager");
+            //}
         }
 
         protected virtual void Update() { }
