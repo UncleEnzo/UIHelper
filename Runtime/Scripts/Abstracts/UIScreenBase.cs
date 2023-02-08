@@ -113,6 +113,7 @@ namespace Nevelson.UIHelper
 
         public void LockSelectables()
         {
+            Debug.Log("UIScreenBase Locking Selectables");
             InitSelectables();
 
             bool failure = false;
@@ -137,6 +138,7 @@ namespace Nevelson.UIHelper
 
         public void UnlockSelectables()
         {
+            Debug.Log("UIScreenBase Unlocking Selectables");
             InitSelectables();
 
             bool failure = false;

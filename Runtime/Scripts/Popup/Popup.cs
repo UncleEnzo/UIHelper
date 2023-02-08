@@ -27,6 +27,7 @@ namespace Nevelson.UIHelper
 
         public void LockSelectables()
         {
+            Debug.Log("Popup Locking Selectables");
             InitSelectables();
 
             bool failure = false;
@@ -51,6 +52,7 @@ namespace Nevelson.UIHelper
 
         public void UnlockSelectables()
         {
+            Debug.Log("Popup Unlocking Selectables");
             InitSelectables();
 
             bool failure = false;
