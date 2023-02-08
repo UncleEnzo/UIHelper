@@ -75,7 +75,7 @@ namespace Nevelson.UIHelper
 
         void UpdateSelectables()
         {
-            Debug.Log("Regenerating selectables dictionary");
+            Debug.Log("Popup Regenerating selectables dictionary");
 
             //Clever Unity specific work around to deleting nulls in unity only
             foreach (var key in selectables.Keys.ToArray())
