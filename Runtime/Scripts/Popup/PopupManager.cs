@@ -1,15 +1,11 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Nevelson.UIHelper
 {
     public class PopupManager : MonoBehaviour, IUIManager, ISetUIFocus
     {
         [SerializeField] UIScreen uiScreen;
-        [SerializeField] UnityEvent<Action, GameObject> animateAppearPopup;
-        [SerializeField] UnityEvent<Action, GameObject> animateClosePopup;
         Stack<Popup> openPopups = new Stack<Popup>();
 
         public void SetUsingController(bool isUsingController)
@@ -56,28 +52,7 @@ namespace Nevelson.UIHelper
 
             popup.gameObject.SetActive(true);
 
-            if (animateAppearPopup.GetPersistentEventCount() == 0)
-            {
-                popup.UnlockSelectables();
-                popup.SetUIFocus();
-                openPopups.Push(popup);
-            }
-            else if (animateAppearPopup.GetPersistentEventCount() == 1)
-            {
-                animateAppearPopup.Invoke(
-                    () =>
-                    {
-                        popup.UnlockSelectables();
-                        popup.SetUIFocus();
-                        openPopups.Push(popup);
-                    },
-                    popup.gameObject
-                );
-            }
-            else
-            {
-                Debug.LogError($"Animate popup appear does not support more than one event");
-            }
+            popup.AnimateOpen(openPopups);
         }
 
         public void UIReset()
@@ -146,21 +121,7 @@ namespace Nevelson.UIHelper
                 uiScreen.SetUIFocus();
             }
 
-            if (animateClosePopup.GetPersistentEventCount() == 0)
-            {
-                CleanUpPopup();
-            }
-            else if (animateClosePopup.GetPersistentEventCount() == 1)
-            {
-                animateClosePopup.Invoke(
-                    () => CleanUpPopup(),
-                    popup.gameObject
-                );
-            }
-            else
-            {
-                Debug.LogError($"Animate popup close does not support more than one event");
-            }
+            popup.AnimateClose(CleanUpPopup);
         }
 
         void Awake()
