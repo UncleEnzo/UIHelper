@@ -22,7 +22,7 @@ namespace Nevelson.UIHelper
             }
         }
 
-        public void OnClick_ScreenBack()
+        public virtual void OnClick_ScreenBack()
         {
             if (backButtonScreen == null)
             {
@@ -40,7 +40,7 @@ namespace Nevelson.UIHelper
             OnClick_ChangeUIScreen(backButtonScreen);
         }
 
-        public void OnClick_ChangeUIScreen(UIScreenBase toUIScreen)
+        public virtual void OnClick_ChangeUIScreen(UIScreenBase toUIScreen)
         {
             if (isLockedForAnimation)
             {
@@ -52,7 +52,7 @@ namespace Nevelson.UIHelper
             IManageScreens.ChangeToNextScreen(toUIScreen);
         }
 
-        public void OnClick_ChangeScene(string sceneName)
+        public virtual void OnClick_ChangeScene(string sceneName)
         {
             if (isLockedForAnimation)
             {
@@ -65,7 +65,7 @@ namespace Nevelson.UIHelper
             SceneManager.LoadScene(sceneName);
         }
 
-        public void OnClick_ChangeScene(int sceneBuildIndex)
+        public virtual void OnClick_ChangeScene(int sceneBuildIndex)
         {
             if (isLockedForAnimation)
             {
@@ -78,7 +78,7 @@ namespace Nevelson.UIHelper
             SceneManager.LoadScene(sceneBuildIndex);
         }
 
-        public void OnClick_ReloadCurrentScene()
+        public virtual void OnClick_ReloadCurrentScene()
         {
             if (isLockedForAnimation)
             {
@@ -91,7 +91,7 @@ namespace Nevelson.UIHelper
             SceneManager.LoadScene(scene.buildIndex);
         }
 
-        public void OnClick_QuitApplication()
+        public virtual void OnClick_QuitApplication()
         {
             if (isLockedForAnimation)
             {
