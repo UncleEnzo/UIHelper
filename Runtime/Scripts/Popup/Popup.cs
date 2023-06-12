@@ -22,6 +22,7 @@ namespace Nevelson.UIHelper
         int animateCloseSubscribeCounter = 0;
         int callsAppear = 0;
         int callsClose = 0;
+        int callsRequiredAppear;
 
         public void SubscribeAppearPopup(UnityAction<Action, GameObject> action)
         {
@@ -121,17 +122,19 @@ namespace Nevelson.UIHelper
             }
             else
             {
-                int callsRequired = animateAppearPopup.GetPersistentEventCount() + animateAppearSubscribeCounter;
+                callsRequiredAppear = animateAppearPopup.GetPersistentEventCount() + animateAppearSubscribeCounter;
 
                 void MultiCastDisplayCallback()
                 {
-                    if (callsAppear < callsRequired)
+                    if (callsAppear < callsRequiredAppear)
                     {
                         callsAppear++;
+                        Debug.Log($"Calls required {callsRequiredAppear}. Incrementing calls to {callsAppear}");
                         return;
                     }
                     callsAppear = 0;
                     DisplayCallback();
+                    Debug.Log($"MADE IT TO DISPLAY");
                 }
 
                 animateAppearPopup.Invoke(MultiCastDisplayCallback, gameObject);
