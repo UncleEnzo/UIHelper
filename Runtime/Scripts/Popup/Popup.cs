@@ -126,7 +126,7 @@ namespace Nevelson.UIHelper
 
                 void MultiCastDisplayCallback()
                 {
-                    if (callsAppear < callsRequiredAppear)
+                    if (callsAppear <= callsRequiredAppear)
                     {
                         callsAppear++;
                         Debug.Log($"Calls required {callsRequiredAppear}. Incrementing calls to {callsAppear}");
@@ -156,7 +156,7 @@ namespace Nevelson.UIHelper
                 int callsRequired = animateClosePopup.GetPersistentEventCount() + animateCloseSubscribeCounter;
                 void MultiCastCleanUpPopup()
                 {
-                    if (callsClose < callsRequired)
+                    if (callsClose <= callsRequired)
                     {
                         callsClose++;
                         return;
