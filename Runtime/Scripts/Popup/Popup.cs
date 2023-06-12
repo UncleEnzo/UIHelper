@@ -31,6 +31,12 @@ namespace Nevelson.UIHelper
             animateClosePopup.AddListener(action);
         }
 
+        public void RemoveAllListeners()
+        {
+            animateAppearPopup.RemoveAllListeners();
+            animateClosePopup.RemoveAllListeners();
+        }
+
         public void Init(Action<Popup> closePopup)
         {
             this.closePopup = closePopup;
