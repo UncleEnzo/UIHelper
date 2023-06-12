@@ -20,6 +20,8 @@ namespace Nevelson.UIHelper
         bool isUsingController;
         int animateAppearSubscribeCounter = 0;
         int animateCloseSubscribeCounter = 0;
+        int callsAppear = 0;
+        int callsClose = 0;
 
         public void SubscribeAppearPopup(UnityAction<Action, GameObject> action)
         {
@@ -119,19 +121,17 @@ namespace Nevelson.UIHelper
             }
             else
             {
-                int calls = 0;
                 int callsRequired = animateAppearPopup.GetPersistentEventCount() + animateAppearSubscribeCounter;
 
                 void MultiCastDisplayCallback()
                 {
-                    if (calls < callsRequired)
+                    if (callsAppear < callsRequired)
                     {
-                        calls++;
+                        callsAppear++;
                         return;
                     }
-                    UnlockSelectables();
-                    SetUIFocus();
-                    openPopups.Push(this);
+                    callsAppear = 0;
+                    DisplayCallback();
                 }
 
                 animateAppearPopup.Invoke(MultiCastDisplayCallback, gameObject);
@@ -150,15 +150,15 @@ namespace Nevelson.UIHelper
             }
             else
             {
-                int calls = 0;
                 int callsRequired = animateClosePopup.GetPersistentEventCount() + animateCloseSubscribeCounter;
                 void MultiCastCleanUpPopup()
                 {
-                    if (calls < callsRequired)
+                    if (callsClose < callsRequired)
                     {
-                        calls++;
+                        callsClose++;
                         return;
                     }
+                    callsClose = 0;
                     CleanUpPopup();
                 }
                 animateClosePopup.Invoke(MultiCastCleanUpPopup, gameObject);
