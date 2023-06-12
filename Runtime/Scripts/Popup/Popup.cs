@@ -23,16 +23,20 @@ namespace Nevelson.UIHelper
 
         public void SubscribeAppearPopup(UnityAction<Action, GameObject> action)
         {
+            animateAppearSubscribeCounter++;
             animateAppearPopup.AddListener(action);
         }
 
         public void SubscribeClosePopup(UnityAction<Action, GameObject> action)
         {
+            animateCloseSubscribeCounter++;
             animateClosePopup.AddListener(action);
         }
 
         public void RemoveAllListeners()
         {
+            animateAppearSubscribeCounter = 0;
+            animateCloseSubscribeCounter = 0;
             animateAppearPopup.RemoveAllListeners();
             animateClosePopup.RemoveAllListeners();
         }
