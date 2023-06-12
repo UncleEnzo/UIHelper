@@ -10,9 +10,9 @@ namespace Nevelson.UIHelper
 {
     public class Popup : MonoBehaviour, ISelectables, ISetUIFocus
     {
+        public UnityEvent<Action, GameObject> AnimateAppearPopup;
+        public UnityEvent<Action, GameObject> AnimateClosePopup;
         [SerializeField] GameObject focusTargetOnDisplay;
-        [SerializeField] UnityEvent<Action, GameObject> animateAppearPopup;
-        [SerializeField] UnityEvent<Action, GameObject> animateClosePopup;
         Dictionary<Selectable, Navigation> selectables;
         Action<Popup> closePopup;
         Navigation navigationNone = new Navigation();
@@ -80,15 +80,15 @@ namespace Nevelson.UIHelper
 
         public void AnimateOpen(Stack<Popup> openPopups)
         {
-            if (animateAppearPopup.GetPersistentEventCount() == 0)
+            if (AnimateAppearPopup.GetPersistentEventCount() == 0)
             {
                 UnlockSelectables();
                 SetUIFocus();
                 openPopups.Push(this);
             }
-            else if (animateAppearPopup.GetPersistentEventCount() == 1)
+            else if (AnimateAppearPopup.GetPersistentEventCount() == 1)
             {
-                animateAppearPopup.Invoke(
+                AnimateAppearPopup.Invoke(
                     () =>
                     {
                         UnlockSelectables();
@@ -106,13 +106,13 @@ namespace Nevelson.UIHelper
 
         public void AnimateClose(Action CleanUpPopup)
         {
-            if (animateClosePopup.GetPersistentEventCount() == 0)
+            if (AnimateClosePopup.GetPersistentEventCount() == 0)
             {
                 CleanUpPopup();
             }
-            else if (animateClosePopup.GetPersistentEventCount() == 1)
+            else if (AnimateClosePopup.GetPersistentEventCount() == 1)
             {
-                animateClosePopup.Invoke(
+                AnimateClosePopup.Invoke(
                     () => CleanUpPopup(),
                     gameObject
                 );
