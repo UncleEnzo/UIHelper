@@ -18,8 +18,8 @@ namespace Nevelson.UIHelper
         Action<Popup> closePopup;
         Navigation navigationNone = new Navigation();
         bool isUsingController;
-        int animateAppearSubscribeCounter;
-        int animateCloseSubscribeCounter;
+        int animateAppearSubscribeCounter = 0;
+        int animateCloseSubscribeCounter = 0;
 
         public void SubscribeAppearPopup(UnityAction<Action, GameObject> action)
         {
@@ -103,27 +103,38 @@ namespace Nevelson.UIHelper
 
         public void AnimateOpen(Stack<Popup> openPopups)
         {
-            if (animateAppearPopup.GetPersistentEventCount() + animateAppearSubscribeCounter == 0)
+            void DisplayCallback()
             {
                 UnlockSelectables();
                 SetUIFocus();
                 openPopups.Push(this);
             }
+            if (animateAppearPopup.GetPersistentEventCount() + animateAppearSubscribeCounter == 0)
+            {
+                DisplayCallback();
+            }
             else if (animateAppearPopup.GetPersistentEventCount() + animateAppearSubscribeCounter == 1)
             {
-                animateAppearPopup.Invoke(
-                    () =>
-                    {
-                        UnlockSelectables();
-                        SetUIFocus();
-                        openPopups.Push(this);
-                    },
-                    gameObject
-                );
+                animateAppearPopup.Invoke(DisplayCallback, gameObject);
             }
             else
             {
-                Debug.LogError($"Animate popup appear does not support more than one event");
+                int calls = 0;
+                int callsRequired = animateAppearPopup.GetPersistentEventCount() + animateAppearSubscribeCounter;
+
+                void MultiCastDisplayCallback()
+                {
+                    if (calls < callsRequired)
+                    {
+                        calls++;
+                        return;
+                    }
+                    UnlockSelectables();
+                    SetUIFocus();
+                    openPopups.Push(this);
+                }
+
+                animateAppearPopup.Invoke(MultiCastDisplayCallback, gameObject);
             }
         }
 
@@ -135,14 +146,22 @@ namespace Nevelson.UIHelper
             }
             else if (animateClosePopup.GetPersistentEventCount() + animateCloseSubscribeCounter == 1)
             {
-                animateClosePopup.Invoke(
-                    () => CleanUpPopup(),
-                    gameObject
-                );
+                animateClosePopup.Invoke(CleanUpPopup, gameObject);
             }
             else
             {
-                Debug.LogError($"Animate popup close does not support more than one event");
+                int calls = 0;
+                int callsRequired = animateClosePopup.GetPersistentEventCount() + animateCloseSubscribeCounter;
+                void MultiCastCleanUpPopup()
+                {
+                    if (calls < callsRequired)
+                    {
+                        calls++;
+                        return;
+                    }
+                    CleanUpPopup();
+                }
+                animateClosePopup.Invoke(MultiCastCleanUpPopup, gameObject);
             }
         }
 
