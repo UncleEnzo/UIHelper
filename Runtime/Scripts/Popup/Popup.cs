@@ -10,13 +10,26 @@ namespace Nevelson.UIHelper
 {
     public class Popup : MonoBehaviour, ISelectables, ISetUIFocus
     {
-        public UnityEvent<Action, GameObject> AnimateAppearPopup;
-        public UnityEvent<Action, GameObject> AnimateClosePopup;
+
+        [SerializeField] UnityEvent<Action, GameObject> animateAppearPopup;
+        [SerializeField] UnityEvent<Action, GameObject> animateClosePopup;
         [SerializeField] GameObject focusTargetOnDisplay;
         Dictionary<Selectable, Navigation> selectables;
         Action<Popup> closePopup;
         Navigation navigationNone = new Navigation();
         bool isUsingController;
+        int animateAppearSubscribeCounter;
+        int animateCloseSubscribeCounter;
+
+        public void SubscribeAppearPopup(UnityAction<Action, GameObject> action)
+        {
+            animateAppearPopup.AddListener(action);
+        }
+
+        public void SubscribeClosePopup(UnityAction<Action, GameObject> action)
+        {
+            animateClosePopup.AddListener(action);
+        }
 
         public void Init(Action<Popup> closePopup)
         {
@@ -80,15 +93,15 @@ namespace Nevelson.UIHelper
 
         public void AnimateOpen(Stack<Popup> openPopups)
         {
-            if (AnimateAppearPopup.GetPersistentEventCount() == 0)
+            if (animateAppearPopup.GetPersistentEventCount() + animateAppearSubscribeCounter == 0)
             {
                 UnlockSelectables();
                 SetUIFocus();
                 openPopups.Push(this);
             }
-            else if (AnimateAppearPopup.GetPersistentEventCount() == 1)
+            else if (animateAppearPopup.GetPersistentEventCount() + animateAppearSubscribeCounter == 1)
             {
-                AnimateAppearPopup.Invoke(
+                animateAppearPopup.Invoke(
                     () =>
                     {
                         UnlockSelectables();
@@ -106,13 +119,13 @@ namespace Nevelson.UIHelper
 
         public void AnimateClose(Action CleanUpPopup)
         {
-            if (AnimateClosePopup.GetPersistentEventCount() == 0)
+            if (animateClosePopup.GetPersistentEventCount() + animateCloseSubscribeCounter == 0)
             {
                 CleanUpPopup();
             }
-            else if (AnimateClosePopup.GetPersistentEventCount() == 1)
+            else if (animateClosePopup.GetPersistentEventCount() + animateCloseSubscribeCounter == 1)
             {
-                AnimateClosePopup.Invoke(
+                animateClosePopup.Invoke(
                     () => CleanUpPopup(),
                     gameObject
                 );
