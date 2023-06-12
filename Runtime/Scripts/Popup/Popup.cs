@@ -129,12 +129,10 @@ namespace Nevelson.UIHelper
                     callsAppear++;
                     if (callsAppear < callsRequiredAppear)
                     {
-                        Debug.Log($"Calls required {callsRequiredAppear}. Incrementing calls to {callsAppear}");
                         return;
                     }
                     callsAppear = 0;
                     DisplayCallback();
-                    Debug.Log($"MADE IT TO DISPLAY");
                 }
 
                 animateAppearPopup.Invoke(MultiCastDisplayCallback, gameObject);
