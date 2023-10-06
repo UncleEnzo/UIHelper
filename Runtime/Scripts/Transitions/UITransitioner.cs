@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
@@ -14,9 +15,14 @@ namespace Nevelson.UIHelper
         [SerializeField] Color color = Color.black;
         [SerializeField] bool exitTransitionOnAwake;
         [SerializeField] UnityEvent onStartTransitionBegin;
+        public static EventHandler on_StartTransitionBegin;
         [SerializeField] UnityEvent onStartTransitionComplete;
+        public static EventHandler on_StartTransitionComplete;
         [SerializeField] UnityEvent onExitTransitionBegin;
+        public static EventHandler on_ExitTransitionBegin;
         [SerializeField] UnityEvent onExitTransitionComplete;
+        public static EventHandler on_ExitTransitionComplete;
+
 
         Animator animator;
         const string START_ANIM_STATE = "StartTransition";
@@ -37,18 +43,20 @@ namespace Nevelson.UIHelper
 
         public void On_StartTransition()
         {
+            on_StartTransitionBegin?.Invoke(this, EventArgs.Empty);
             onStartTransitionBegin?.Invoke();
             SetAnimator();
             animator.CrossFade(START_ANIM_STATE, 0);
-            StartCoroutine(AfterTransitionEventCo(onStartTransitionComplete));
+            StartCoroutine(AfterTransitionEventCo(onStartTransitionComplete, on_StartTransitionComplete));
         }
 
         public void On_EndTransition()
         {
+            on_ExitTransitionBegin?.Invoke(this, EventArgs.Empty);
             onExitTransitionBegin?.Invoke();
             SetAnimator();
             animator.CrossFade(END_ANIM_STATE, 0);
-            StartCoroutine(AfterTransitionEventCo(onExitTransitionComplete));
+            StartCoroutine(AfterTransitionEventCo(onExitTransitionComplete, on_ExitTransitionComplete));
         }
 
         public void On_FullTransition(float waitBetweenTransitions)
@@ -68,13 +76,14 @@ namespace Nevelson.UIHelper
             }
         }
 
-        IEnumerator AfterTransitionEventCo(UnityEvent uEvent)
+        IEnumerator AfterTransitionEventCo(UnityEvent uEvent, EventHandler sEvent)
         {
             yield return null;
             while (!IsTransitionPlaying)
             {
                 yield return null;
             }
+            sEvent?.Invoke(this, EventArgs.Empty);
             uEvent?.Invoke();
         }
 
