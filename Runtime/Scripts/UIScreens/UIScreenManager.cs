@@ -1,4 +1,5 @@
 using Nevelson.Utils;
+using Rewired;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -24,7 +25,7 @@ namespace Nevelson.UIHelper
     [RequireComponent(typeof(AudioSource))]
     public class UIScreenManager : MonoBehaviour, IManageScreens
     {
-        [SerializeField] bool isUsingController = false;
+        const string UISCREEN_MANAGER_LOG = "UI Screen Manager: ";
         [SerializeField] AudioClip hoverSound;
         [SerializeField] AudioClip pressedSound;
         [SerializeField] CanvasEventListener[] canvasListeners = new CanvasEventListener[0];
@@ -33,18 +34,70 @@ namespace Nevelson.UIHelper
         AudioSource audioSource;
         UIScreenBase[] uiScreens;
         UIScreenBase currentScreen;
-        bool currentIsUsingController;
+        private Player player;
+        bool isUsingController = false;
+        ControllerType currentCType;
         public bool IsUsingController
         {
             get => isUsingController;
             set
             {
-                if (value != isUsingController)
-                {
-                    RefreshScreenControls();
-                }
+                if (isUsingController == value) return;
                 isUsingController = value;
-                currentIsUsingController = isUsingController;
+                foreach (var screen in uiScreens)
+                {
+                    screen.SetUsingController(isUsingController);
+                }
+                currentScreen.SetUIFocus();
+            }
+        }
+
+        void Start()
+        {
+            player = ReInput.players.GetPlayer(0); // Assuming Player 0
+            ReInput.ControllerConnectedEvent += OnControllerConnected;
+            ReInput.ControllerDisconnectedEvent += OnControllerDisconnected;
+
+            Init();
+            StartFirstScreen();
+        }
+
+        void OnControllerConnected(ControllerStatusChangedEventArgs args)
+        {
+            Debug.Log($"{UISCREEN_MANAGER_LOG} Controller Connected: " + args.name);
+            IsUsingController = true;
+        }
+
+        void OnControllerDisconnected(ControllerStatusChangedEventArgs args)
+        {
+            Debug.Log($"{UISCREEN_MANAGER_LOG} Controller Disconnected: " + args.name);
+            IsUsingController = false;
+        }
+
+        void Update()
+        {
+            UpdateCurrentController();
+
+            // Removing functionality to switch using a serialized BOOl
+            //if (currentCType != isUsingController)
+            //{
+            //    RefreshScreenControls();
+            //}
+        }
+
+        void UpdateCurrentController()
+        {
+            //handles dynamic controller switching.
+            //mouse and keyboard are treated as the SAME controller
+            ControllerType cType = player.controllers.GetLastActiveController().type;
+            if ((cType == ControllerType.Joystick && cType != currentCType) ||
+                (cType == ControllerType.Mouse && currentCType == ControllerType.Joystick) ||
+                (cType == ControllerType.Keyboard && currentCType == ControllerType.Joystick))
+            {
+                Debug.Log($"{UISCREEN_MANAGER_LOG} Switching from {currentCType} to {cType}");
+                //is using controller automatically refreshes controls
+                IsUsingController = cType == ControllerType.Joystick;
+                currentCType = cType;
             }
         }
 
@@ -71,22 +124,6 @@ namespace Nevelson.UIHelper
             currentScreen = _nextScreen;
         }
 
-        void Start()
-        {
-            Init();
-            StartFirstScreen();
-        }
-
-        void Update()
-        {
-            //handles UI controller switching through inspector
-            if (currentIsUsingController != isUsingController)
-            {
-                RefreshScreenControls();
-                currentIsUsingController = isUsingController;
-            }
-        }
-
         void OnDestroy()
         {
             for (int i = 0; i < canvasListeners.Length; i++)
@@ -98,6 +135,9 @@ namespace Nevelson.UIHelper
             {
                 stringCanvasListeners[i].stringGameEvent.OnEventRaised -= stringCanvasListeners[i].canvasResponse.Invoke;
             }
+
+            ReInput.ControllerConnectedEvent -= OnControllerConnected;
+            ReInput.ControllerDisconnectedEvent -= OnControllerDisconnected;
         }
 
         void Init()
@@ -167,15 +207,6 @@ namespace Nevelson.UIHelper
                     }
                 }
             }
-        }
-
-        void RefreshScreenControls()
-        {
-            foreach (var screen in uiScreens)
-            {
-                screen.SetUsingController(isUsingController);
-            }
-            currentScreen.SetUIFocus();
         }
 
         void StartFirstScreen()

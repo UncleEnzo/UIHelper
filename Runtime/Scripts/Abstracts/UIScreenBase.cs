@@ -113,7 +113,7 @@ namespace Nevelson.UIHelper
 
         public void LockSelectables()
         {
-            Debug.Log($"{gameObject.name} Locking Selectables");
+            //Debug.Log($"{gameObject.name} Locking Selectables");
             InitSelectables();
 
             bool failure = false;
@@ -138,7 +138,7 @@ namespace Nevelson.UIHelper
 
         public void UnlockSelectables()
         {
-            Debug.Log($"{gameObject.name} Unlocking Selectables");
+            //Debug.Log($"{gameObject.name} Unlocking Selectables");
             InitSelectables();
 
             bool failure = false;
@@ -168,7 +168,7 @@ namespace Nevelson.UIHelper
 
         public void SetUIFocus()
         {
-            //Debug.Log($"{gameObject.name} is calling SetUIFocus. Is using controller for screen set to {isUsingController}");
+            Debug.Log($"{gameObject.name} is calling SetUIFocus. Is using controller for screen set to {isUsingController}");
             foreach (var manager in iPopupManagers)
             {
                 manager.SetUsingController(isUsingController);
@@ -241,7 +241,7 @@ namespace Nevelson.UIHelper
 
         void UpdateSelectables()
         {
-            Debug.Log($"{gameObject.name} Regenerating selectables dictionary");
+            //Debug.Log($"{gameObject.name} Regenerating selectables dictionary");
 
             //Clever Unity specific work around to deleting nulls in unity only
             foreach (var key in selectables.Keys.ToArray())

@@ -1,6 +1,4 @@
 namespace Nevelson.UIHelper
 {
-    public class UIScreen : UIScreenBase
-    {
-    }
+    public class UIScreen : UIScreenBase { }
 }
