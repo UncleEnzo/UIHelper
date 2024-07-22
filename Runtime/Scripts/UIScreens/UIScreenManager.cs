@@ -89,7 +89,9 @@ namespace Nevelson.UIHelper
         {
             //handles dynamic controller switching.
             //mouse and keyboard are treated as the SAME controller
-            ControllerType cType = player.controllers.GetLastActiveController().type;
+            Controller c = player.controllers.GetLastActiveController();
+            if (c == null) return;
+            ControllerType cType = c.type;
             if ((cType == ControllerType.Joystick && cType != currentCType) ||
                 (cType == ControllerType.Mouse && currentCType == ControllerType.Joystick) ||
                 (cType == ControllerType.Keyboard && currentCType == ControllerType.Joystick))
