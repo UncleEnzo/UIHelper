@@ -44,6 +44,16 @@ namespace Nevelson.UIHelper
             {
                 if (isUsingController == value) return;
                 isUsingController = value;
+                if (isUsingController)
+                {
+                    Cursor.lockState = CursorLockMode.Locked;
+                    Cursor.visible = false;
+                }
+                else
+                {
+                    Cursor.lockState = CursorLockMode.None;
+                    Cursor.visible = true;
+                }
                 foreach (var screen in uiScreens)
                 {
                     screen.SetUsingController(isUsingController);
