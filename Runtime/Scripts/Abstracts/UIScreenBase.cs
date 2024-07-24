@@ -187,7 +187,7 @@ namespace Nevelson.UIHelper
 
             if (focusTargetOnDisplay == null && isUsingController)
             {
-                Debug.LogError($"Attempting to use controller but {gameObject.name} focusTargetOnDisplay field is null.");
+                Debug.Log($"Attempting to use controller but {gameObject.name} focusTargetOnDisplay field is null.");
                 return;
             }
 
