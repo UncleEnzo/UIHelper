@@ -11,6 +11,7 @@ namespace Nevelson.UIHelper
     [RequireComponent(typeof(CanvasGroup))]
     public abstract class UIScreenBase : ButtonsBase, IScreen, ISelectables, ISetUIFocus
     {
+        public GameObject FocusTarget { get => focusTargetOnDisplay; }
         [SerializeField] GameObject focusTargetOnDisplay;
         [SerializeField] UnityEvent<Action, GameObject> animateScreenDisplay;
         [SerializeField] UnityEvent onDisplay;
