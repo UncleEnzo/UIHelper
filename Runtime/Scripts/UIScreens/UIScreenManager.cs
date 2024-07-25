@@ -1,10 +1,23 @@
 using Nevelson.Utils;
-using Rewired;
 using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+
+namespace Nevelson.UIHelper
+{
+    public static class ControllerManager
+    {
+        public static event Action<bool> On_ChangeController;
+
+        public static void Invoke(bool isUsingController)
+        {
+            On_ChangeController?.Invoke(isUsingController);
+        }
+    }
+}
+
 
 namespace Nevelson.UIHelper
 {
@@ -34,84 +47,86 @@ namespace Nevelson.UIHelper
         AudioSource audioSource;
         UIScreenBase[] uiScreens;
         UIScreenBase currentScreen;
-        private Player player;
-        bool isUsingController = false;
-        ControllerType currentCType;
+        //private Player player;
+        //bool _isUsingController;
+        //ControllerType currentCType;
         public bool IsUsingController
         {
-            get => isUsingController;
-            set
+            get; private set;
+
+            //set
+            //{
+            //    if (isUsingController == value) return;
+            //    isUsingController = value;
+            //if (isUsingController)
+            //{
+            //    Cursor.lockState = CursorLockMode.Locked;
+            //    Cursor.visible = false;
+            //}
+            //else
+            //{
+            //    Cursor.lockState = CursorLockMode.None;
+            //    Cursor.visible = true;
+            //}
+
+            //}
+        }
+
+        void HandleControllerUpdate(bool isUsingController)
+        {
+            IsUsingController = isUsingController;
+            foreach (var screen in uiScreens)
             {
-                if (isUsingController == value) return;
-                isUsingController = value;
-                if (isUsingController)
-                {
-                    Cursor.lockState = CursorLockMode.Locked;
-                    Cursor.visible = false;
-                }
-                else
-                {
-                    Cursor.lockState = CursorLockMode.None;
-                    Cursor.visible = true;
-                }
-                foreach (var screen in uiScreens)
-                {
-                    screen.SetUsingController(isUsingController);
-                }
-                currentScreen.SetUIFocus();
+                screen.SetUsingController(isUsingController);
             }
+            currentScreen.SetUIFocus();
         }
 
         void Start()
         {
-            player = ReInput.players.GetPlayer(0); // Assuming Player 0
-            ReInput.ControllerConnectedEvent += OnControllerConnected;
-            ReInput.ControllerDisconnectedEvent += OnControllerDisconnected;
+            //player = ReInput.players.GetPlayer(0); // Assuming Player 0
+            //ReInput.ControllerConnectedEvent += OnControllerConnected;
+            //ReInput.ControllerDisconnectedEvent += OnControllerDisconnected;
 
             Init();
             StartFirstScreen();
+            ControllerManager.On_ChangeController += HandleControllerUpdate;
         }
 
-        void OnControllerConnected(ControllerStatusChangedEventArgs args)
-        {
-            Debug.Log($"{UISCREEN_MANAGER_LOG} Controller Connected: " + args.name);
-            IsUsingController = true;
-        }
+        //void OnControllerConnected(ControllerStatusChangedEventArgs args)
+        //{
+        //    Debug.Log($"{UISCREEN_MANAGER_LOG} Controller Connected: " + args.name);
+        //    IsUsingController = true;
+        //}
 
-        void OnControllerDisconnected(ControllerStatusChangedEventArgs args)
-        {
-            Debug.Log($"{UISCREEN_MANAGER_LOG} Controller Disconnected: " + args.name);
-            IsUsingController = false;
-        }
+        //void OnControllerDisconnected(ControllerStatusChangedEventArgs args)
+        //{
+        //    Debug.Log($"{UISCREEN_MANAGER_LOG} Controller Disconnected: " + args.name);
+        //    IsUsingController = false;
+        //}
 
-        void Update()
-        {
-            UpdateCurrentController();
+        //void Update()
+        //{
+        //    UpdateCurrentController();
+        //}
 
-            // Removing functionality to switch using a serialized BOOl
-            //if (currentCType != isUsingController)
-            //{
-            //    RefreshScreenControls();
-            //}
-        }
-
-        void UpdateCurrentController()
-        {
-            //handles dynamic controller switching.
-            //mouse and keyboard are treated as the SAME controller
-            Controller c = player.controllers.GetLastActiveController();
-            if (c == null) return;
-            ControllerType cType = c.type;
-            if ((cType == ControllerType.Joystick && cType != currentCType) ||
-                (cType == ControllerType.Mouse && currentCType == ControllerType.Joystick) ||
-                (cType == ControllerType.Keyboard && currentCType == ControllerType.Joystick))
-            {
-                Debug.Log($"{UISCREEN_MANAGER_LOG} Switching from {currentCType} to {cType}");
-                //is using controller automatically refreshes controls
-                IsUsingController = cType == ControllerType.Joystick;
-                currentCType = cType;
-            }
-        }
+        //void UpdateCurrentController()
+        //{
+        //    //handles dynamic controller switching.
+        //    //mouse and keyboard are treated as the SAME controller
+        //    Controller c = player.controllers.GetLastActiveController();
+        //    if (c == null) return;
+        //    ControllerType cType = c.type;
+        //    if ((cType == ControllerType.Joystick && cType != currentCType) ||
+        //        (cType == ControllerType.Mouse && currentCType == ControllerType.Joystick) ||
+        //        (cType == ControllerType.Keyboard && currentCType == ControllerType.Joystick))
+        //    {
+        //        Debug.Log($"{UISCREEN_MANAGER_LOG} Switching from {currentCType} to {cType}");
+        //        //is using controller automatically refreshes controls
+        //        IsUsingController = cType == ControllerType.Joystick;
+        //        currentCType = cType;
+        //    }
+        //}
 
         public void ChangeToNextScreen(UIScreenBase nextScreen)
         {
@@ -148,8 +163,9 @@ namespace Nevelson.UIHelper
                 stringCanvasListeners[i].stringGameEvent.OnEventRaised -= stringCanvasListeners[i].canvasResponse.Invoke;
             }
 
-            ReInput.ControllerConnectedEvent -= OnControllerConnected;
-            ReInput.ControllerDisconnectedEvent -= OnControllerDisconnected;
+            ControllerManager.On_ChangeController -= HandleControllerUpdate;
+            //ReInput.ControllerConnectedEvent -= OnControllerConnected;
+            //ReInput.ControllerDisconnectedEvent -= OnControllerDisconnected;
         }
 
         void Init()

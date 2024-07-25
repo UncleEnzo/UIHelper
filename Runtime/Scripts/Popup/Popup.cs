@@ -215,6 +215,7 @@ namespace Nevelson.UIHelper
             if (!isUsingController)
             {
                 EventSystem.current.SetSelectedGameObject(null);
+                return;
             }
 
             if (focusTargetOnDisplay == null)
