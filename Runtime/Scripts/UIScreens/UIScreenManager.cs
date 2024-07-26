@@ -57,11 +57,12 @@ namespace Nevelson.UIHelper
         {
             ControllerManager.On_ChangeController += HandleControllerUpdate;
             Init();
+            StartFirstScreen();
         }
 
         void Start()
         {
-            StartFirstScreen();
+
         }
 
         public void ChangeToNextScreen(UIScreenBase nextScreen)
