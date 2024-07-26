@@ -40,6 +40,13 @@ namespace Nevelson.UIHelper
 
         public virtual void Init()
         {
+            navigationNone.mode = Navigation.Mode.None;
+            iPopupManagers = GetComponentsInChildren<PopupManager>(true);
+            iTabManagers = GetComponentsInChildren<TabManager>(true);
+            if (iPopupManagers.Length > 1)
+            {
+                Debug.LogError($"Screen {gameObject.name} has more than 1 popupmanager.  if you need multiple popups, use the same manager");
+            }
             ResetUIManagers();
             LockSelectables();
             HideScreenCanvasGroup();
@@ -207,21 +214,7 @@ namespace Nevelson.UIHelper
             }
         }
 
-        protected virtual void Awake()
-        {
-            navigationNone.mode = Navigation.Mode.None;
-            iPopupManagers = GetComponentsInChildren<PopupManager>(true);
-            iTabManagers = GetComponentsInChildren<TabManager>(true);
-            if (iPopupManagers.Length > 1)
-            {
-                Debug.LogError($"Screen {gameObject.name} has more than 1 popupmanager.  if you need multiple popups, use the same manager");
-            }
-            //commenting this error out for now, doesn't seem to be an actual issue currently
-            //if (iTabManagers.Length > 1)
-            //{
-            //    Debug.LogError($"Screen {gameObject.name} has more than 1 popupmanager.  if you need multiple tabs, use the same manager");
-            //}
-        }
+        protected virtual void Awake() { }
 
         protected virtual void Update() { }
 
