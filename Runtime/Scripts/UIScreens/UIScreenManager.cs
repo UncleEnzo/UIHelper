@@ -53,7 +53,7 @@ namespace Nevelson.UIHelper
             get; private set;
         }
 
-        void Awake()
+        void OnEnable()
         {
             ControllerManager.On_ChangeController += HandleControllerUpdate;
             Init();
