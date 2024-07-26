@@ -56,11 +56,11 @@ namespace Nevelson.UIHelper
         void Awake()
         {
             ControllerManager.On_ChangeController += HandleControllerUpdate;
+            Init();
         }
 
         void Start()
         {
-            Init();
             StartFirstScreen();
         }
 
