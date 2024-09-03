@@ -66,6 +66,7 @@ namespace Nevelson.UIHelper
                 UnlockSelectables();
                 SetUIFocus();
                 IsScreenDisplayed = true;
+                onDisplay?.Invoke();
             }
             else if (animateScreenDisplay.GetPersistentEventCount() == 1)
             {
@@ -76,6 +77,7 @@ namespace Nevelson.UIHelper
                     SetUIFocus();
                     IsScreenDisplayed = true;
                     isLockedForAnimation = false;
+                    onDisplay?.Invoke();
                 },
                 this.gameObject);
             }
@@ -83,7 +85,7 @@ namespace Nevelson.UIHelper
             {
                 Debug.LogError($"Animate screen display does not support more than one event");
             }
-            onDisplay?.Invoke();
+
         }
 
         public virtual void Hide()
