@@ -13,6 +13,7 @@ namespace Nevelson.UIHelper
     {
         public GameObject FocusTarget { get => focusTargetOnDisplay; }
         [SerializeField] GameObject focusTargetOnDisplay;
+        [SerializeField] UnityEvent beforeAnimateScreen;
         [SerializeField] UnityEvent<Action, GameObject> animateScreenDisplay;
         [SerializeField] UnityEvent onDisplay;
         [SerializeField] UnityEvent<Action, GameObject> animateScreenHide;
@@ -61,6 +62,8 @@ namespace Nevelson.UIHelper
             }
 
             DisplayScreenCanvasGroup();
+
+            beforeAnimateScreen?.Invoke();
             if (animateScreenDisplay.GetPersistentEventCount() == 0)
             {
                 UnlockSelectables();
