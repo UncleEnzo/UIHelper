@@ -212,18 +212,21 @@ namespace Nevelson.UIHelper
 
         public void SetUIFocus()
         {
+            Debug.Log("REACHED THIS");
             if (!isUsingController)
             {
                 EventSystem.current.SetSelectedGameObject(null);
                 return;
             }
 
+            Debug.Log("REACHED THIS 1");
             if (focusTargetOnDisplay == null)
             {
                 Debug.LogError($"Attempting to set focus for popup element {gameObject.name} that has focusTargetOnDisplay = null");
                 return;
             }
 
+            Debug.Log("REACHED THIS 2");
             EventSystem.current.SetSelectedGameObject(focusTargetOnDisplay);
         }
 
