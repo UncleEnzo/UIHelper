@@ -65,6 +65,7 @@ namespace Nevelson.UIHelper
                 //Debug.Log($"Locking UI element: {selectable.Key.gameObject.name}");
                 if (selectable.Key == null)
                 {
+                    Debug.LogError("HIT ERROR WITH SELECTABLES");
                     failure = true;
                     break;
                 }
@@ -87,7 +88,7 @@ namespace Nevelson.UIHelper
             bool failure = false;
             foreach (KeyValuePair<Selectable, Navigation> selectable in selectables)
             {
-                //Debug.Log($"Unlocking UI element: {selectable.Key.gameObject.name}");
+                Debug.Log($"Unlocking UI element: {selectable.Key.gameObject.name}");
                 if (selectable.Key == null)
                 {
                     failure = true;
@@ -177,6 +178,7 @@ namespace Nevelson.UIHelper
             Selectable[] selectableUIElements = GetComponentsInChildren<Selectable>(true);
             foreach (var selectable in selectableUIElements)
             {
+                Debug.Log($"ADDING SELECTABLE {gameObject.name}");
                 selectables.Add(selectable, selectable.navigation);
             }
         }
