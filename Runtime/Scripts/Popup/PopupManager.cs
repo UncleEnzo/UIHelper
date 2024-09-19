@@ -16,21 +16,24 @@ namespace Nevelson.UIHelper
 
             //bug is that the popups AREn'T open when this happens
             //just set for all
-            foreach (var popup in openPopups)
-            {
-                Debug.Log($"REACHED THIS 0-1: Setting is using to: {isUsingController}");
-                popup.SetUsingController(isUsingController);
-            }
+            //foreach (var popup in openPopups)
+            //{
+            //    Debug.Log($"REACHED THIS 0-1: Setting is using to: {isUsingController}");
+            //    popup.SetUsingController(isUsingController);
+            //}
         }
 
         public void SetUIFocus()
         {
+            Debug.Log($"Reached this 00001234: Calling set UI FOCUS");
+
             if (openPopups.Count == 0)
             {
                 Debug.Log("Not setting UI focus for popups. No popups open");
                 return;
             }
 
+            Debug.Log($"Reached this 1234: setting controller to {isUsingController}");
             var popup = openPopups.Peek();
             popup.SetUsingController(isUsingController);
             popup.SetUIFocus();
