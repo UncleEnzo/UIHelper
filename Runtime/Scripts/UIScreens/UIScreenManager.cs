@@ -153,7 +153,9 @@ namespace Nevelson.UIHelper
                         UICancelHandler uiCancel = tabButton.gameObject.AddComponent<UICancelHandler>();
                         uiCancel.Init(uiScreen, null, tabManager);
 
-                        foreach (Selectable selectable in tab.tabPage.GetComponentsInChildren<Selectable>())
+
+                        //todo right here need to add it 
+                        foreach (Selectable selectable in tab.tabPage.GetComponentsInChildren<Selectable>(true))
                         {
                             //Need to try/get in case the tabButton is in the tab page
                             if (!selectable.gameObject.TryGetComponent(out UICancelHandler contains))
