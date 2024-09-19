@@ -213,9 +213,10 @@ namespace Nevelson.UIHelper
 
         public void SetUIFocus()
         {
-            Debug.Log("REACHED THIS");
+            Debug.Log($"REACHED THIS CONTROLLER| {isUsingController}");
             if (!isUsingController)
             {
+                Debug.Log("REACHED THIS, STUCK HERE FOR SOME REASON?");
                 EventSystem.current.SetSelectedGameObject(null);
                 return;
             }

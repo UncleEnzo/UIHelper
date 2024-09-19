@@ -14,18 +14,21 @@ namespace Nevelson.UIHelper
             Debug.Log($"REACHED THIS 0: Setting is using to: {isUsingController}");
             this.isUsingController = isUsingController;
 
+            //This will get called but only AFTER, 
             //bug is that the popups AREn'T open when this happens
             //just set for all
-            //foreach (var popup in openPopups)
-            //{
-            //    Debug.Log($"REACHED THIS 0-1: Setting is using to: {isUsingController}");
-            //    popup.SetUsingController(isUsingController);
-            //}
+            foreach (var popup in openPopups)
+            {
+                Debug.Log($"REACHED THIS 0-1: Setting is using to: {isUsingController}");
+                popup.SetUsingController(isUsingController);
+            }
         }
 
         public void SetUIFocus()
         {
-            Debug.Log($"Reached this 00001234: Calling set UI FOCUS");
+            //THIS DOES NOTHING
+
+            //Debug.Log($"Reached this 00001234: Calling set UI FOCUS");
 
             if (openPopups.Count == 0)
             {
@@ -64,7 +67,6 @@ namespace Nevelson.UIHelper
             }
 
             popup.gameObject.SetActive(true);
-
             popup.AnimateOpen(openPopups);
         }
 
