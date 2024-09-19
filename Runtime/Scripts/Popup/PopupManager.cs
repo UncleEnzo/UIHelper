@@ -8,37 +8,36 @@ namespace Nevelson.UIHelper
         [SerializeField] UIScreen uiScreen;
         Stack<Popup> openPopups = new Stack<Popup>();
         bool isUsingController;
+        bool _isUsingControllerPEPEPE
+        {
+            get { return isUsingController; }
+            set
+            {
+                Debug.Log($"Setting controller to {value}");
+                isUsingController = value;
+            }
+        }
 
         public void SetUsingController(bool isUsingController)
         {
             Debug.Log($"REACHED THIS 0: Setting is using to: {isUsingController}");
-            this.isUsingController = isUsingController;
-
-            //This will get called but only AFTER, 
-            //bug is that the popups AREn'T open when this happens
-            //just set for all
+            _isUsingControllerPEPEPE = isUsingController;
             foreach (var popup in openPopups)
             {
                 Debug.Log($"REACHED THIS 0-1: Setting is using to: {isUsingController}");
-                popup.SetUsingController(isUsingController);
+                popup.SetUsingController(_isUsingControllerPEPEPE);
             }
         }
 
         public void SetUIFocus()
         {
-            //THIS DOES NOTHING
-
-            //Debug.Log($"Reached this 00001234: Calling set UI FOCUS");
-
             if (openPopups.Count == 0)
             {
                 Debug.Log("Not setting UI focus for popups. No popups open");
                 return;
             }
 
-            Debug.Log($"Reached this 1234: setting controller to {isUsingController}");
             var popup = openPopups.Peek();
-            popup.SetUsingController(isUsingController);
             popup.SetUIFocus();
         }
 
@@ -67,6 +66,7 @@ namespace Nevelson.UIHelper
             }
 
             popup.gameObject.SetActive(true);
+            popup.SetUsingController(_isUsingControllerPEPEPE);
             popup.AnimateOpen(openPopups);
         }
 
