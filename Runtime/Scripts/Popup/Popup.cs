@@ -167,7 +167,8 @@ namespace Nevelson.UIHelper
             }
         }
 
-        void InitSelectables()
+        //this one needs to be public so they can be initialized on UIScreen manager early enough to not get locked by accident and lose their navigations
+        public void InitSelectables()
         {
             Debug.Log($"ADDING REACHED HERE 1 {gameObject.name}");
             if (selectables != null)
@@ -233,7 +234,6 @@ namespace Nevelson.UIHelper
 
         void Awake()
         {
-            InitSelectables();
             navigationNone.mode = Navigation.Mode.None;
         }
     }

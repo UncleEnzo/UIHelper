@@ -138,6 +138,8 @@ namespace Nevelson.UIHelper
                 //first find all popups and give their selectables the popup reference
                 foreach (Popup popup in uiScreen.GetComponentsInChildren<Popup>(true))
                 {
+                    popup.InitSelectables();
+
                     foreach (Selectable popupSelectable in popup.GetComponentsInChildren<Selectable>(true))
                     {
                         UICancelHandler uiCancel = popupSelectable.gameObject.AddComponent<UICancelHandler>();
