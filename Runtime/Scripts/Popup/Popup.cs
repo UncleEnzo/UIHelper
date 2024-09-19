@@ -88,12 +88,12 @@ namespace Nevelson.UIHelper
             bool failure = false;
             foreach (KeyValuePair<Selectable, Navigation> selectable in selectables)
             {
-                Debug.Log($"Unlocking UI element: {selectable.Key.gameObject.name}");
                 if (selectable.Key == null)
                 {
                     failure = true;
                     break;
                 }
+                Debug.Log($"ADDING test unlocking Unlocking UI element: {selectable.Key.gameObject.name} and value {selectable.Value}");
                 selectable.Key.interactable = true;
                 selectable.Key.navigation = selectable.Value;
             }
@@ -180,7 +180,7 @@ namespace Nevelson.UIHelper
             Debug.Log($"ADDING REACHED HERE 2 {gameObject.name}");
             foreach (var selectable in selectableUIElements)
             {
-                Debug.Log($"ADDING SELECTABLE 3{gameObject.name}");
+                Debug.Log($"(many times) ADDING SELECTABLE 3{selectable.gameObject.name}");
                 selectables.Add(selectable, selectable.navigation);
             }
         }
@@ -211,28 +211,23 @@ namespace Nevelson.UIHelper
 
         public void SetUsingController(bool isUsingController)
         {
-            Debug.Log($"REACHED THIS 0-2: Setting is using to: {isUsingController}");
             this.isUsingController = isUsingController;
         }
 
         public void SetUIFocus()
         {
-            Debug.Log($"REACHED THIS CONTROLLER| {isUsingController}");
             if (!isUsingController)
             {
-                Debug.Log("REACHED THIS, STUCK HERE FOR SOME REASON?");
                 EventSystem.current.SetSelectedGameObject(null);
                 return;
             }
 
-            Debug.Log("REACHED THIS 1");
             if (focusTargetOnDisplay == null)
             {
                 Debug.LogError($"Attempting to set focus for popup element {gameObject.name} that has focusTargetOnDisplay = null");
                 return;
             }
 
-            Debug.Log("REACHED THIS 2");
             EventSystem.current.SetSelectedGameObject(focusTargetOnDisplay);
         }
 
