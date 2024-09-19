@@ -1,3 +1,4 @@
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -41,7 +42,14 @@ namespace Nevelson.UIHelper
                 }
             }
 
-            uiScreen.OnClick_ScreenBack();
+            if (uiScreen == null)
+            {
+                Debug.LogWarning("Could not find UI screen for cancel handler. This is not necessaryily a bug, but most likely is.  Check if there is a separate event type on the UI canceler to be sure. (if not then it's a bug)");
+            }
+            else
+            {
+                uiScreen.OnClick_ScreenBack();
+            }
         }
 
         //If there are any other components with different selectable functionality
