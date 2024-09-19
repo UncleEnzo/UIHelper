@@ -169,6 +169,7 @@ namespace Nevelson.UIHelper
 
         void InitSelectables()
         {
+            Debug.Log($"ADDING REACHED HERE 1 {gameObject.name}");
             if (selectables != null)
             {
                 return;
@@ -176,9 +177,10 @@ namespace Nevelson.UIHelper
 
             selectables = new Dictionary<Selectable, Navigation>();
             Selectable[] selectableUIElements = GetComponentsInChildren<Selectable>(true);
+            Debug.Log($"ADDING REACHED HERE 2 {gameObject.name}");
             foreach (var selectable in selectableUIElements)
             {
-                Debug.Log($"ADDING SELECTABLE {gameObject.name}");
+                Debug.Log($"ADDING SELECTABLE 3{gameObject.name}");
                 selectables.Add(selectable, selectable.navigation);
             }
         }
