@@ -46,6 +46,7 @@ namespace Nevelson.UIHelper
 
         public void Init(Action<Popup> closePopup)
         {
+            InitSelectables();
             this.closePopup = closePopup;
         }
 
