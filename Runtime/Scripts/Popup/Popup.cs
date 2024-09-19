@@ -93,7 +93,7 @@ namespace Nevelson.UIHelper
                     failure = true;
                     break;
                 }
-                Debug.Log($"ADDING test unlocking Unlocking UI element: {selectable.Key.gameObject.name} and value {selectable.Value}");
+                Debug.Log($"ADDING test unlocking Unlocking UI element: {selectable.Key.gameObject.name} and value {selectable.Value.mode}");
                 selectable.Key.interactable = true;
                 selectable.Key.navigation = selectable.Value;
             }
@@ -180,7 +180,7 @@ namespace Nevelson.UIHelper
             Debug.Log($"ADDING REACHED HERE 2 {gameObject.name}");
             foreach (var selectable in selectableUIElements)
             {
-                Debug.Log($"(many times) ADDING SELECTABLE 3{selectable.gameObject.name}");
+                Debug.Log($"(many times) ADDING SELECTABLE 3{selectable.gameObject.name} | nav is: {selectable.navigation.mode}");
                 selectables.Add(selectable, selectable.navigation);
             }
         }
