@@ -7,10 +7,15 @@ namespace Nevelson.UIHelper
     {
         [SerializeField] UIScreen uiScreen;
         Stack<Popup> openPopups = new Stack<Popup>();
+        bool isUsingController;
 
         public void SetUsingController(bool isUsingController)
         {
             Debug.Log($"REACHED THIS 0: Setting is using to: {isUsingController}");
+            this.isUsingController = isUsingController;
+
+            //bug is that the popups AREn'T open when this happens
+            //just set for all
             foreach (var popup in openPopups)
             {
                 Debug.Log($"REACHED THIS 0-1: Setting is using to: {isUsingController}");
@@ -25,7 +30,10 @@ namespace Nevelson.UIHelper
                 Debug.Log("Not setting UI focus for popups. No popups open");
                 return;
             }
-            openPopups.Peek().SetUIFocus();
+
+            var popup = openPopups.Peek();
+            popup.SetUsingController(isUsingController);
+            popup.SetUIFocus();
         }
 
         public void OnClick_OpenPopup(Popup popup)
