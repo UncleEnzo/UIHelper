@@ -8,24 +8,13 @@ namespace Nevelson.UIHelper
         [SerializeField] UIScreen uiScreen;
         Stack<Popup> openPopups = new Stack<Popup>();
         bool isUsingController;
-        bool _isUsingController
-        {
-            get { return isUsingController; }
-            set
-            {
-                Debug.Log($"Setting controller to {value}");
-                isUsingController = value;
-            }
-        }
 
         public void SetUsingController(bool isUsingController)
         {
-            Debug.Log($"REACHED THIS 0: Setting is using to: {isUsingController}");
-            _isUsingController = isUsingController;
+            this.isUsingController = isUsingController;
             foreach (var popup in openPopups)
             {
-                Debug.Log($"REACHED THIS 0-1: Setting is using to: {isUsingController}");
-                popup.SetUsingController(_isUsingController);
+                popup.SetUsingController(isUsingController);
             }
         }
 
@@ -66,7 +55,7 @@ namespace Nevelson.UIHelper
             }
 
             popup.gameObject.SetActive(true);
-            popup.SetUsingController(_isUsingController);
+            popup.SetUsingController(isUsingController);
             popup.AnimateOpen(openPopups);
         }
 

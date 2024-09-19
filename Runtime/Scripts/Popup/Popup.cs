@@ -65,7 +65,6 @@ namespace Nevelson.UIHelper
                 //Debug.Log($"Locking UI element: {selectable.Key.gameObject.name}");
                 if (selectable.Key == null)
                 {
-                    Debug.LogError("HIT ERROR WITH SELECTABLES");
                     failure = true;
                     break;
                 }
@@ -93,7 +92,7 @@ namespace Nevelson.UIHelper
                     failure = true;
                     break;
                 }
-                Debug.Log($"ADDING test unlocking Unlocking UI element: {selectable.Key.gameObject.name} and value {selectable.Value.mode}");
+                //Debug.Log($"ADDING test unlocking Unlocking UI element: {selectable.Key.gameObject.name} and value {selectable.Value.mode}");
                 selectable.Key.interactable = true;
                 selectable.Key.navigation = selectable.Value;
             }
@@ -170,7 +169,6 @@ namespace Nevelson.UIHelper
         //this one needs to be public so they can be initialized on UIScreen manager early enough to not get locked by accident and lose their navigations
         public void InitSelectables()
         {
-            Debug.Log($"ADDING REACHED HERE 1 {gameObject.name}");
             if (selectables != null)
             {
                 return;
@@ -178,10 +176,9 @@ namespace Nevelson.UIHelper
 
             selectables = new Dictionary<Selectable, Navigation>();
             Selectable[] selectableUIElements = GetComponentsInChildren<Selectable>(true);
-            Debug.Log($"ADDING REACHED HERE 2 {gameObject.name}");
             foreach (var selectable in selectableUIElements)
             {
-                Debug.Log($"(many times) ADDING SELECTABLE 3{selectable.gameObject.name} | nav is: {selectable.navigation.mode}");
+                //Debug.Log($"ADDING SELECTABLE 3{selectable.gameObject.name} | nav is: {selectable.navigation.mode}");
                 selectables.Add(selectable, selectable.navigation);
             }
         }
