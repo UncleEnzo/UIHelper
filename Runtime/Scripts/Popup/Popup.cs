@@ -109,6 +109,7 @@ namespace Nevelson.UIHelper
             void DisplayCallback()
             {
                 UnlockSelectables();
+                Debug.Log("REACHED THIS: set focus callback");
                 SetUIFocus();
                 openPopups.Push(this);
             }
