@@ -207,6 +207,7 @@ namespace Nevelson.UIHelper
 
         public void SetUsingController(bool isUsingController)
         {
+            Debug.Log($"REACHED THIS 0-2: Setting is using to: {isUsingController}");
             this.isUsingController = isUsingController;
         }
 

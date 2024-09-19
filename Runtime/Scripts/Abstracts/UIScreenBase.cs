@@ -184,6 +184,7 @@ namespace Nevelson.UIHelper
             Debug.Log($"{gameObject.name} is calling SetUIFocus. Is using controller for screen set to {isUsingController}");
             foreach (var manager in iPopupManagers)
             {
+                Debug.Log($"REACHED THIS 0: Setting is using to: {isUsingController}");
                 manager.SetUsingController(isUsingController);
             }
 

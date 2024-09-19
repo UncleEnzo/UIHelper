@@ -10,8 +10,10 @@ namespace Nevelson.UIHelper
 
         public void SetUsingController(bool isUsingController)
         {
+            Debug.Log($"REACHED THIS 0: Setting is using to: {isUsingController}");
             foreach (var popup in openPopups)
             {
+                Debug.Log($"REACHED THIS 0-1: Setting is using to: {isUsingController}");
                 popup.SetUsingController(isUsingController);
             }
         }
