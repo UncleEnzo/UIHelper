@@ -12,6 +12,7 @@ namespace Nevelson.UIHelper
     public abstract class UIScreenBase : ButtonsBase, IScreen, ISelectables, ISetUIFocus
     {
         public GameObject FocusTarget { get => focusTargetOnDisplay; }
+        [SerializeField] bool hidePreviousScreen = true;
         [SerializeField] GameObject focusTargetOnDisplay;
         [SerializeField] UnityEvent beforeAnimateScreen;
         [SerializeField] UnityEvent<Action, GameObject> animateScreenDisplay;
@@ -39,6 +40,8 @@ namespace Nevelson.UIHelper
             }
         }
 
+        public bool HidePreviousScreenElements { get => hidePreviousScreen; }
+
         public virtual void Init()
         {
             navigationNone.mode = Navigation.Mode.None;
@@ -50,7 +53,7 @@ namespace Nevelson.UIHelper
             }
             ResetUIManagers();
             LockSelectables();
-            HideScreenCanvasGroup();
+            HideScreenCanvasGroup(true);
         }
 
         public virtual void Display()
@@ -91,7 +94,7 @@ namespace Nevelson.UIHelper
 
         }
 
-        public virtual void Hide()
+        public virtual void Hide(bool hideCanvasElements)
         {
             if (!IsScreenDisplayed)
             {
@@ -105,14 +108,14 @@ namespace Nevelson.UIHelper
 
             if (animateScreenHide.GetPersistentEventCount() == 0)
             {
-                HideScreenCanvasGroup();
+                HideScreenCanvasGroup(hideCanvasElements);
             }
             else if (animateScreenHide.GetPersistentEventCount() == 1)
             {
                 isLockedForAnimation = true;
                 animateScreenHide.Invoke(() =>
                 {
-                    HideScreenCanvasGroup();
+                    HideScreenCanvasGroup(hideCanvasElements);
                     isLockedForAnimation = false;
                 },
                 gameObject
@@ -257,7 +260,7 @@ namespace Nevelson.UIHelper
             {
                 if (!selectables.ContainsKey(selectable))
                 {
-                    Debug.Log($"Adding new selectable: {selectable.gameObject.name}");
+                    //Debug.Log($"Adding new selectable: {selectable.gameObject.name}");
                     selectables.Add(selectable, selectable.navigation);
                 }
             }
@@ -291,9 +294,9 @@ namespace Nevelson.UIHelper
             CanvasGroup.blocksRaycasts = true;
         }
 
-        void HideScreenCanvasGroup()
+        void HideScreenCanvasGroup(bool hideCanvasElements)
         {
-            CanvasGroup.alpha = 0f;
+            if (hideCanvasElements) CanvasGroup.alpha = 0f;
             CanvasGroup.interactable = false;
             CanvasGroup.blocksRaycasts = false;
             IsScreenDisplayed = false;

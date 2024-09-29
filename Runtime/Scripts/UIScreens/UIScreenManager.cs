@@ -78,7 +78,7 @@ namespace Nevelson.UIHelper
 
         IEnumerator HideThenDisplayCo(UIScreenBase _currentScreen, UIScreenBase _nextScreen)
         {
-            _currentScreen.Hide();
+            _currentScreen.Hide(_nextScreen.HidePreviousScreenElements);
             while (_currentScreen.IsScreenDisplayed)
             {
                 yield return null;
