@@ -11,7 +11,7 @@ namespace Nevelson.UIHelper
     [RequireComponent(typeof(CanvasGroup))]
     public abstract class UIScreenBase : ButtonsBase, IScreen, ISelectables, ISetUIFocus
     {
-        public GameObject FocusTarget { get => focusTargetOnDisplay; }
+        public GameObject FocusTarget { get => focusTargetOnDisplay; set => focusTargetOnDisplay = value; }
         [SerializeField] bool hidePreviousScreen = true;
         [SerializeField] GameObject focusTargetOnDisplay;
         [SerializeField] UnityEvent beforeAnimateScreen;
