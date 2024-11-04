@@ -28,6 +28,7 @@ namespace Nevelson.UIHelper
         {
             if (hoverSound != null)
             {
+                Debug.Log("HIT THIS 1");
                 audioSource.PlayOneShot(hoverSound);
             }
         }
@@ -36,6 +37,7 @@ namespace Nevelson.UIHelper
         {
             if (hoverSound != null)
             {
+                Debug.Log("HIT THIS 2");
                 audioSource.PlayOneShot(hoverSound);
             }
         }
@@ -44,6 +46,7 @@ namespace Nevelson.UIHelper
         {
             if (pressedSound != null)
             {
+                Debug.Log("HIT THIS 3");
                 audioSource.PlayOneShot(pressedSound);
             }
         }
