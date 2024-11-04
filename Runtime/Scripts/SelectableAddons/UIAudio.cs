@@ -8,6 +8,7 @@ namespace Nevelson.UIHelper
         AudioSource audioSource;
         AudioClip hoverSound;
         AudioClip pressedSound;
+        public bool IsEnabled { get; set; } = true;
 
         public void Init(AudioSource audioSource, AudioClip hoverSound, AudioClip pressedSound)
         {
@@ -18,7 +19,7 @@ namespace Nevelson.UIHelper
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (pressedSound != null)
+            if (IsEnabled && pressedSound != null)
             {
                 audioSource.PlayOneShot(pressedSound);
             }
@@ -26,27 +27,24 @@ namespace Nevelson.UIHelper
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (hoverSound != null)
+            if (IsEnabled && hoverSound != null)
             {
-                Debug.Log("HIT THIS 1");
                 audioSource.PlayOneShot(hoverSound);
             }
         }
 
         public void OnSelect(BaseEventData eventData)
         {
-            if (hoverSound != null)
+            if (IsEnabled && hoverSound != null)
             {
-                Debug.Log("HIT THIS 2");
                 audioSource.PlayOneShot(hoverSound);
             }
         }
 
         public void OnSubmit(BaseEventData eventData)
         {
-            if (pressedSound != null)
+            if (IsEnabled && pressedSound != null)
             {
-                Debug.Log("HIT THIS 3");
                 audioSource.PlayOneShot(pressedSound);
             }
         }
