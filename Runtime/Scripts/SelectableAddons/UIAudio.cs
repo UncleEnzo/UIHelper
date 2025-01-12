@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Nevelson.UIHelper
 {
@@ -19,6 +20,12 @@ namespace Nevelson.UIHelper
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            Selectable selectable = GetComponent<Selectable>();
+            if (selectable != null && !selectable.interactable)
+            {
+                return;
+            }
+
             if (IsEnabled && pressedSound != null)
             {
                 audioSource.PlayOneShot(pressedSound);
@@ -27,6 +34,12 @@ namespace Nevelson.UIHelper
 
         public void OnPointerEnter(PointerEventData eventData)
         {
+            Selectable selectable = GetComponent<Selectable>();
+            if (selectable != null && !selectable.interactable)
+            {
+                return;
+            }
+
             if (IsEnabled && hoverSound != null)
             {
                 audioSource.PlayOneShot(hoverSound);
@@ -35,6 +48,12 @@ namespace Nevelson.UIHelper
 
         public void OnSelect(BaseEventData eventData)
         {
+            Selectable selectable = GetComponent<Selectable>();
+            if (selectable != null && !selectable.interactable)
+            {
+                return;
+            }
+
             if (IsEnabled && hoverSound != null)
             {
                 audioSource.PlayOneShot(hoverSound);
@@ -43,6 +62,12 @@ namespace Nevelson.UIHelper
 
         public void OnSubmit(BaseEventData eventData)
         {
+            Selectable selectable = GetComponent<Selectable>();
+            if (selectable != null && !selectable.interactable)
+            {
+                return;
+            }
+
             if (IsEnabled && pressedSound != null)
             {
                 audioSource.PlayOneShot(pressedSound);
