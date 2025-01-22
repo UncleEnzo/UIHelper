@@ -2,6 +2,6 @@ public interface IScreen
 {
     void Init();
     public bool IsScreenDisplayed { get; }
-    void Display();
-    void Hide(bool setElementsTransparent);
+    void Display(bool useAnims = true);
+    void Hide(bool setElementsTransparent, bool useAnims = true);
 }

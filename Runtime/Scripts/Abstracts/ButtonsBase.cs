@@ -22,6 +22,13 @@ namespace Nevelson.UIHelper
             }
         }
 
+        const string lockedForAnimationError = "Trying to transition screens but another screen is animating!";
+
+        protected virtual void Update()
+        {
+            //todo either queue orrr maybe make it so you can override somehow... 
+        }
+
         public virtual void OnClick_ScreenBack()
         {
             if (backButtonScreen == null)
@@ -32,7 +39,7 @@ namespace Nevelson.UIHelper
 
             if (isLockedForAnimation)
             {
-                Debug.Log("Back button pressed but screen locked for animation!");
+                Debug.LogError(lockedForAnimationError);
                 return;
             }
 
@@ -40,11 +47,23 @@ namespace Nevelson.UIHelper
             OnClick_ChangeUIScreen(backButtonScreen);
         }
 
+        public virtual void OnClick_ChangeUIScreenNoAnims(UIScreenBase toUIScreen)
+        {
+            if (isLockedForAnimation)
+            {
+                Debug.LogError(lockedForAnimationError);
+                return;
+            }
+
+            Debug.Log($"Changing UI to screen: {toUIScreen.gameObject.name} WITHOUT Animation");
+            IManageScreens.ChangeToNextScreenNoAnim(toUIScreen);
+        }
+
         public virtual void OnClick_ChangeUIScreen(UIScreenBase toUIScreen)
         {
             if (isLockedForAnimation)
             {
-                Debug.Log("Back button pressed but screen locked for animation!");
+                Debug.LogError(lockedForAnimationError);
                 return;
             }
 
@@ -56,7 +75,7 @@ namespace Nevelson.UIHelper
         {
             if (isLockedForAnimation)
             {
-                Debug.Log("Back button pressed but screen locked for animation!");
+                Debug.LogError(lockedForAnimationError);
                 return;
             }
 
@@ -69,7 +88,7 @@ namespace Nevelson.UIHelper
         {
             if (isLockedForAnimation)
             {
-                Debug.Log("Back button pressed but screen locked for animation!");
+                Debug.LogError(lockedForAnimationError);
                 return;
             }
 
@@ -82,7 +101,7 @@ namespace Nevelson.UIHelper
         {
             if (isLockedForAnimation)
             {
-                Debug.Log("Back button pressed but screen locked for animation!");
+                Debug.LogError(lockedForAnimationError);
                 return;
             }
 
@@ -95,7 +114,7 @@ namespace Nevelson.UIHelper
         {
             if (isLockedForAnimation)
             {
-                Debug.Log("Back button pressed but screen locked for animation!");
+                Debug.LogError(lockedForAnimationError);
                 return;
             }
 

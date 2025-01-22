@@ -56,7 +56,7 @@ namespace Nevelson.UIHelper
             HideScreenCanvasGroup(true);
         }
 
-        public virtual void Display()
+        public virtual void Display(bool useAnims = true)
         {
             if (IsScreenDisplayed)
             {
@@ -67,7 +67,7 @@ namespace Nevelson.UIHelper
             DisplayScreenCanvasGroup();
 
             beforeAnimateScreen?.Invoke();
-            if (animateScreenDisplay.GetPersistentEventCount() == 0)
+            if (useAnims || animateScreenDisplay.GetPersistentEventCount() == 0)
             {
                 UnlockSelectables();
                 SetUIFocus();
@@ -94,7 +94,7 @@ namespace Nevelson.UIHelper
 
         }
 
-        public virtual void Hide(bool hideCanvasElements)
+        public virtual void Hide(bool hideCanvasElements, bool useAnims = true)
         {
             if (!IsScreenDisplayed)
             {
@@ -106,7 +106,7 @@ namespace Nevelson.UIHelper
             ResetUIManagers();
             LockSelectables();
 
-            if (animateScreenHide.GetPersistentEventCount() == 0)
+            if (useAnims || animateScreenHide.GetPersistentEventCount() == 0)
             {
                 HideScreenCanvasGroup(hideCanvasElements);
             }
@@ -225,7 +225,10 @@ namespace Nevelson.UIHelper
 
         protected virtual void Awake() { }
 
-        protected virtual void Update() { }
+        protected override void Update()
+        {
+            base.Update();
+        }
 
         void InitSelectables()
         {

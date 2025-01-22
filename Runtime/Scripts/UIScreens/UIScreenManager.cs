@@ -65,6 +65,29 @@ namespace Nevelson.UIHelper
 
         }
 
+        public void ChangeToNextScreenNoAnim(UIScreenBase nextScreen)
+        {
+            if (nextScreen == null)
+            {
+                Debug.LogError("Next Screen is Null");
+                return;
+            }
+
+            StartCoroutine(HideThenDisplayNoAnimsCo(currentScreen, nextScreen));
+        }
+
+        IEnumerator HideThenDisplayNoAnimsCo(UIScreenBase _currentScreen, UIScreenBase _nextScreen)
+        {
+            _currentScreen.Hide(_nextScreen.HidePreviousScreenElements, useAnims: false);
+            while (_currentScreen.IsScreenDisplayed)
+            {
+                yield return null;
+            }
+
+            _nextScreen.Display(useAnims: false);
+            currentScreen = _nextScreen;
+        }
+
         public void ChangeToNextScreen(UIScreenBase nextScreen)
         {
             if (nextScreen == null)
@@ -205,5 +228,7 @@ namespace Nevelson.UIHelper
             IScreen currentIScreen = currentScreen.GetComponent<IScreen>();
             currentIScreen.Display();
         }
+
+
     }
 }
