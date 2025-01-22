@@ -67,7 +67,7 @@ namespace Nevelson.UIHelper
             DisplayScreenCanvasGroup();
 
             beforeAnimateScreen?.Invoke();
-            if (useAnims || animateScreenDisplay.GetPersistentEventCount() == 0)
+            if (!useAnims || animateScreenDisplay.GetPersistentEventCount() == 0)
             {
                 UnlockSelectables();
                 SetUIFocus();
