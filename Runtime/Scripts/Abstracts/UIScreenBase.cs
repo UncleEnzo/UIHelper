@@ -130,26 +130,26 @@ namespace Nevelson.UIHelper
         public void LockSelectables()
         {
             //Debug.Log($"{gameObject.name} Locking Selectables");
-            InitSelectables();
+            //InitSelectables();
 
-            bool failure = false;
-            foreach (KeyValuePair<Selectable, Navigation> selectable in selectables)
-            {
-                //Debug.Log($"Locking UI element: {selectable.Key.gameObject.name}");
-                if (selectable.Key == null)
-                {
-                    failure = true;
-                    break;
-                }
-                selectable.Key.interactable = false;
-                selectable.Key.navigation = navigationNone;
-            }
+            //bool failure = false;
+            //foreach (KeyValuePair<Selectable, Navigation> selectable in selectables)
+            //{
+            //    //Debug.Log($"Locking UI element: {selectable.Key.gameObject.name}");
+            //    if (selectable.Key == null)
+            //    {
+            //        failure = true;
+            //        break;
+            //    }
+            //    selectable.Key.interactable = false;
+            //    selectable.Key.navigation = navigationNone;
+            //}
 
-            if (failure)
-            {
-                UpdateSelectables();
-                LockSelectables();
-            }
+            //if (failure)
+            //{
+            //    UpdateSelectables();
+            //    LockSelectables();
+            //}
         }
 
         public void UnlockSelectables()

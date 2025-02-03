@@ -114,7 +114,7 @@ namespace Nevelson.UIHelper
                 {
                     if (initialize)
                     {
-                        //tabs[i].tabPage.SetActive(false);
+                        tabs[i].tabPage.SetActive(false);
                         tabs[index].tabPage.SetActive(true);
                         currentTab = tabs[index];
                         SetUIFocus();
