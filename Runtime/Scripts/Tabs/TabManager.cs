@@ -84,87 +84,87 @@ namespace Nevelson.UIHelper
 
         void SelectTab(TabButton button, bool initialize)
         {
-            if (selectedTab != null)
-            {
-                selectedTab.Deselect();
-            }
+            //    if (selectedTab != null)
+            //    {
+            //        selectedTab.Deselect();
+            //    }
 
-            selectedTab = button;
-            selectedTab.Select();
+            //    selectedTab = button;
+            //    selectedTab.Select();
 
-            int index = -1;
-            for (int i = 0; i < tabs.Length; i++)
-            {
-                if (tabs[i].button == button)
-                {
-                    index = i;
-                    break;
-                }
-            }
+            //    int index = -1;
+            //    for (int i = 0; i < tabs.Length; i++)
+            //    {
+            //        if (tabs[i].button == button)
+            //        {
+            //            index = i;
+            //            break;
+            //        }
+            //    }
 
-            if (index == -1)
-            {
-                Debug.LogError($"Could not find index of button {button.gameObject.name}");
-                return;
-            }
+            //    if (index == -1)
+            //    {
+            //        Debug.LogError($"Could not find index of button {button.gameObject.name}");
+            //        return;
+            //    }
 
-            for (int i = 0; i < tabs.Length; i++)
-            {
-                if (tabs[i].tabPage.activeInHierarchy)
-                {
-                    if (initialize)
-                    {
-                        tabs[i].tabPage.SetActive(false);
-                        tabs[index].tabPage.SetActive(true);
-                        currentTab = tabs[index];
-                        SetUIFocus();
-                    }
-                    else
-                    {
-                        if (animateDisableTab.GetPersistentEventCount() == 0)
-                        {
-                            tabs[i].tabPage.SetActive(false);
-                            tabs[index].tabPage.SetActive(true);
-                            currentTab = tabs[index];
-                            SetUIFocus();
-                        }
-                        else if (animateDisableTab.GetPersistentEventCount() == 1)
-                        {
-                            uiScreen.LockSelectables();
-                            animateDisableTab.Invoke(
-                                () =>
-                                {
-                                    tabs[i].tabPage.SetActive(false);
-                                    tabs[index].tabPage.SetActive(true);
-                                    currentTab = tabs[index];
-                                    animateAppearTab.Invoke(() =>
-                                    {
-                                        uiScreen.UnlockSelectables();
-                                        SetUIFocus();
-                                    },
-                                    tabs[index].tabPage);
-                                },
-                                tabs[i].tabPage
-                            );
-                        }
-                        else
-                        {
-                            Debug.LogError($"Animate tab hide does not support more than one event");
-                            Debug.LogError($"Animate appear tab does not support more than one event");
-                        }
-                    }
-                    break;
-                }
-            }
+            //    for (int i = 0; i < tabs.Length; i++)
+            //    {
+            //        if (tabs[i].tabPage.activeInHierarchy)
+            //        {
+            //            if (initialize)
+            //            {
+            //                tabs[i].tabPage.SetActive(false);
+            //                tabs[index].tabPage.SetActive(true);
+            //                currentTab = tabs[index];
+            //                SetUIFocus();
+            //            }
+            //            else
+            //            {
+            //                if (animateDisableTab.GetPersistentEventCount() == 0)
+            //                {
+            //                    tabs[i].tabPage.SetActive(false);
+            //                    tabs[index].tabPage.SetActive(true);
+            //                    currentTab = tabs[index];
+            //                    SetUIFocus();
+            //                }
+            //                else if (animateDisableTab.GetPersistentEventCount() == 1)
+            //                {
+            //                    uiScreen.LockSelectables();
+            //                    animateDisableTab.Invoke(
+            //                        () =>
+            //                        {
+            //                            tabs[i].tabPage.SetActive(false);
+            //                            tabs[index].tabPage.SetActive(true);
+            //                            currentTab = tabs[index];
+            //                            animateAppearTab.Invoke(() =>
+            //                            {
+            //                                uiScreen.UnlockSelectables();
+            //                                SetUIFocus();
+            //                            },
+            //                            tabs[index].tabPage);
+            //                        },
+            //                        tabs[i].tabPage
+            //                    );
+            //                }
+            //                else
+            //                {
+            //                    Debug.LogError($"Animate tab hide does not support more than one event");
+            //                    Debug.LogError($"Animate appear tab does not support more than one event");
+            //                }
+            //            }
+            //            break;
+            //        }
+            //    }
+            //}
+        }
+
+        [Serializable]
+        public class Tab
+        {
+            public TabButton button;
+            public GameObject tabPage;
+            public GameObject setFocusToGameObject;
+            public TabButton uiCancelTabTarget;
         }
     }
-
-    [Serializable]
-    public class Tab
-    {
-        public TabButton button;
-        public GameObject tabPage;
-        public GameObject setFocusToGameObject;
-        public TabButton uiCancelTabTarget;
-    }
-}
