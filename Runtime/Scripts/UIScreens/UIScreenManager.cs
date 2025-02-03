@@ -179,7 +179,6 @@ namespace Nevelson.UIHelper
                         uiCancel.Init(uiScreen, null, tabManager);
 
 
-                        //todo right here need to add it 
                         foreach (Selectable selectable in tab.tabPage.GetComponentsInChildren<Selectable>(true))
                         {
                             //Need to try/get in case the tabButton is in the tab page

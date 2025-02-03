@@ -73,15 +73,13 @@ namespace Nevelson.UIHelper
             SelectTab(button, false);
         }
 
-        //todo testing >this was originally away
         void Awake()
         {
-            //yield return null;
             foreach (var tab in tabs)
             {
                 tab.button.TabGroup = this;
             }
-            //UIReset();
+            UIReset();
         }
 
         void SelectTab(TabButton button, bool initialize)
@@ -116,7 +114,7 @@ namespace Nevelson.UIHelper
                 {
                     if (initialize)
                     {
-                        tabs[i].tabPage.SetActive(false);
+                        //tabs[i].tabPage.SetActive(false);
                         tabs[index].tabPage.SetActive(true);
                         currentTab = tabs[index];
                         SetUIFocus();
