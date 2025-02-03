@@ -23,7 +23,7 @@ namespace Nevelson.UIHelper
         {
             SelectTab(tabs[startingTab].button, true);
             //this could in theory be an animation as long as it resets to the correct tab...
-            animationTabReset?.Invoke(currentTab.tabPage);
+            //animationTabReset?.Invoke(currentTab.tabPage);
         }
 
         public bool UICancel()
