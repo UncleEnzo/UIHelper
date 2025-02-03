@@ -22,6 +22,7 @@ namespace Nevelson.UIHelper
 
         public void UIReset()
         {
+            Debug.Log("TEST: Calling from UI RESET!");
             SelectTab(tabs[startingTab].button, initialize: true);
             //this could in theory be an animation as long as it resets to the correct tab...
             //animationTabReset?.Invoke(currentTab.tabPage);
@@ -57,42 +58,35 @@ namespace Nevelson.UIHelper
             {
                 if (tabs[i].tabPage.activeInHierarchy)
                 {
-                    //so the bug is actually that it's not hitting initialize here
-                    if (initialize)
+                    if (animateDisableTab.GetPersistentEventCount() == 0)
                     {
                         NoAnimsDo(i, index, initialize);
                     }
+                    else if (animateDisableTab.GetPersistentEventCount() == 1)
+                    {
+                        uiScreen.LockSelectables();
+                        animateDisableTab.Invoke(
+                            () =>
+                            {
+                                tabs[i].tabPage.SetActive(false);
+                                tabs[index].tabPage.SetActive(true);
+                                currentTab = tabs[index];
+                                animateAppearTab.Invoke(() =>
+                                {
+                                    uiScreen.UnlockSelectables();
+                                    SetUIFocus();
+                                },
+                                tabs[index].tabPage);
+                            },
+                            tabs[i].tabPage
+                        );
+                    }
                     else
                     {
-                        if (animateDisableTab.GetPersistentEventCount() == 0)
-                        {
-                            NoAnimsDo(i, index, initialize);
-                        }
-                        //else if (animateDisableTab.GetPersistentEventCount() == 1)
-                        //{
-                        //    uiScreen.LockSelectables();
-                        //    animateDisableTab.Invoke(
-                        //        () =>
-                        //        {
-                        //            tabs[i].tabPage.SetActive(false);
-                        //            tabs[index].tabPage.SetActive(true);
-                        //            currentTab = tabs[index];
-                        //            animateAppearTab.Invoke(() =>
-                        //            {
-                        //                uiScreen.UnlockSelectables();
-                        //                SetUIFocus();
-                        //            },
-                        //            tabs[index].tabPage);
-                        //        },
-                        //        tabs[i].tabPage
-                        //    );
-                        //}
-                        //else
-                        //{
-                        //    Debug.LogError($"Animate tab hide does not support more than one event");
-                        //    Debug.LogError($"Animate appear tab does not support more than one event");
-                        //}
+                        Debug.LogError($"Animate tab hide does not support more than one event");
+                        Debug.LogError($"Animate appear tab does not support more than one event");
                     }
+
                     break;
                 }
             }
@@ -100,14 +94,11 @@ namespace Nevelson.UIHelper
 
         void NoAnimsDo(int i, int index, bool initialize)
         {
+            Debug.Log($"TEST: Calling Do Anims on Tab manager. Init == {initialize}");
             if (!initialize)
             {
                 tabs[i].tabPage.SetActive(false);
                 tabs[index].tabPage.SetActive(true);
-            }
-            else
-            {
-                Debug.Log("HIT INITIALIZE");
             }
 
             currentTab = tabs[index];
@@ -120,6 +111,7 @@ namespace Nevelson.UIHelper
             {
                 return false;
             }
+            Debug.Log("TEST: Calling from UI CANCEL");
             SelectTab(currentTab.uiCancelTabTarget, false);
             return true;
         }
@@ -158,6 +150,7 @@ namespace Nevelson.UIHelper
 
         public void OnTabSelected(TabButton button)
         {
+            Debug.Log("TEST: calling from on Tab selected!");
             SelectTab(button, false);
         }
 
