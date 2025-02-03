@@ -59,48 +59,50 @@ namespace Nevelson.UIHelper
                 {
                     if (initialize)
                     {
-                        tabs[i].tabPage.SetActive(false);
-                        tabs[index].tabPage.SetActive(true);
-                        currentTab = tabs[index];
-                        SetUIFocus();
+                        NoAnimsDo(i, index);
                     }
-                    //            else
-                    //            {
-                    //                if (animateDisableTab.GetPersistentEventCount() == 0)
-                    //                {
-                    //                    tabs[i].tabPage.SetActive(false);
-                    //                    tabs[index].tabPage.SetActive(true);
-                    //                    currentTab = tabs[index];
-                    //                    SetUIFocus();
-                    //                }
-                    //                else if (animateDisableTab.GetPersistentEventCount() == 1)
-                    //                {
-                    //                    uiScreen.LockSelectables();
-                    //                    animateDisableTab.Invoke(
-                    //                        () =>
-                    //                        {
-                    //                            tabs[i].tabPage.SetActive(false);
-                    //                            tabs[index].tabPage.SetActive(true);
-                    //                            currentTab = tabs[index];
-                    //                            animateAppearTab.Invoke(() =>
-                    //                            {
-                    //                                uiScreen.UnlockSelectables();
-                    //                                SetUIFocus();
-                    //                            },
-                    //                            tabs[index].tabPage);
-                    //                        },
-                    //                        tabs[i].tabPage
-                    //                    );
-                    //                }
-                    //                else
-                    //                {
-                    //                    Debug.LogError($"Animate tab hide does not support more than one event");
-                    //                    Debug.LogError($"Animate appear tab does not support more than one event");
-                    //                }
-                    //            }
-                    //            break;
+                    else
+                    {
+                        if (animateDisableTab.GetPersistentEventCount() == 0)
+                        {
+                            NoAnimsDo(i, index);
+                        }
+                        //else if (animateDisableTab.GetPersistentEventCount() == 1)
+                        //{
+                        //    uiScreen.LockSelectables();
+                        //    animateDisableTab.Invoke(
+                        //        () =>
+                        //        {
+                        //            tabs[i].tabPage.SetActive(false);
+                        //            tabs[index].tabPage.SetActive(true);
+                        //            currentTab = tabs[index];
+                        //            animateAppearTab.Invoke(() =>
+                        //            {
+                        //                uiScreen.UnlockSelectables();
+                        //                SetUIFocus();
+                        //            },
+                        //            tabs[index].tabPage);
+                        //        },
+                        //        tabs[i].tabPage
+                        //    );
+                        //}
+                        //else
+                        //{
+                        //    Debug.LogError($"Animate tab hide does not support more than one event");
+                        //    Debug.LogError($"Animate appear tab does not support more than one event");
+                        //}
+                    }
+                    break;
                 }
             }
+        }
+
+        void NoAnimsDo(int i, int index)
+        {
+            tabs[i].tabPage.SetActive(false);
+            tabs[index].tabPage.SetActive(true);
+            currentTab = tabs[index];
+            SetUIFocus();
         }
 
         public bool UICancel()
