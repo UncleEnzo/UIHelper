@@ -73,7 +73,8 @@ namespace Nevelson.UIHelper
             SelectTab(button, false);
         }
 
-        void Awake()
+        //todo testing
+        void Start()
         {
             foreach (var tab in tabs)
             {
