@@ -60,7 +60,15 @@ namespace Nevelson.UIHelper
                 {
                     if (animateDisableTab.GetPersistentEventCount() == 0)
                     {
-                        NoAnimsDo(i, index, initialize);
+                        Debug.Log($"TEST: Calling Do Anims on Tab manager. Init == {initialize}");
+                        if (!initialize)
+                        {
+                            tabs[i].tabPage.SetActive(false);
+                            tabs[index].tabPage.SetActive(true);
+                        }
+
+                        currentTab = tabs[index];
+                        SetUIFocus();
                     }
                     else if (animateDisableTab.GetPersistentEventCount() == 1)
                     {
@@ -90,19 +98,6 @@ namespace Nevelson.UIHelper
                     break;
                 }
             }
-        }
-
-        void NoAnimsDo(int i, int index, bool initialize)
-        {
-            Debug.Log($"TEST: Calling Do Anims on Tab manager. Init == {initialize}");
-            if (!initialize)
-            {
-                tabs[i].tabPage.SetActive(false);
-                tabs[index].tabPage.SetActive(true);
-            }
-
-            currentTab = tabs[index];
-            SetUIFocus();
         }
 
         public bool UICancel()
