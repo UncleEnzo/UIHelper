@@ -101,8 +101,8 @@ namespace Nevelson.UIHelper
         {
             tabs[i].tabPage.SetActive(false);
             tabs[index].tabPage.SetActive(true);
-            currentTab = tabs[index];
-            SetUIFocus();
+            //currentTab = tabs[index];
+            //SetUIFocus();
         }
 
         public bool UICancel()
