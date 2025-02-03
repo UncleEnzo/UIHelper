@@ -26,71 +26,15 @@ namespace Nevelson.UIHelper
             //animationTabReset?.Invoke(currentTab.tabPage);
         }
 
-        public bool UICancel()
-        {
-            if (currentTab.uiCancelTabTarget == null)
-            {
-                return false;
-            }
-            SelectTab(currentTab.uiCancelTabTarget, false);
-            return true;
-        }
-
-        public void OnTabEnter(TabButton button)
-        {
-            //No-Op as of yet, may expose or something later
-        }
-
-        public void OnTabExit(TabButton button)
-        {
-            //No-Op as of yet, may expose or something later
-        }
-
-        public void SetUsingController(bool isUsingController)
-        {
-            this.isUsingController = isUsingController;
-        }
-
-        public void SetUIFocus()
-        {
-            if (!isUsingController)
-            {
-                EventSystem.current.SetSelectedGameObject(null);
-                return;
-            }
-
-            if (isUsingController && currentTab.setFocusToGameObject == null)
-            {
-                Debug.LogError($"Attempting to set UI focus to tab {currentTab.tabPage.name} but tab's setFocusToGameobject = {currentTab.setFocusToGameObject}");
-                return;
-            }
-
-            EventSystem.current.SetSelectedGameObject(currentTab.setFocusToGameObject);
-        }
-
-        public void OnTabSelected(TabButton button)
-        {
-            SelectTab(button, false);
-        }
-
-        void Awake()
-        {
-            foreach (var tab in tabs)
-            {
-                tab.button.TabGroup = this;
-            }
-            UIReset();
-        }
-
         void SelectTab(TabButton button, bool initialize)
         {
-            //    if (selectedTab != null)
-            //    {
-            //        selectedTab.Deselect();
-            //    }
+            if (selectedTab != null)
+            {
+                selectedTab.Deselect();
+            }
 
-            //    selectedTab = button;
-            //    selectedTab.Select();
+            selectedTab = button;
+            selectedTab.Select();
 
             //    int index = -1;
             //    for (int i = 0; i < tabs.Length; i++)
@@ -157,14 +101,70 @@ namespace Nevelson.UIHelper
             //        }
             //    }
         }
-    }
 
-    [Serializable]
-    public class Tab
-    {
-        public TabButton button;
-        public GameObject tabPage;
-        public GameObject setFocusToGameObject;
-        public TabButton uiCancelTabTarget;
+        public bool UICancel()
+        {
+            if (currentTab.uiCancelTabTarget == null)
+            {
+                return false;
+            }
+            SelectTab(currentTab.uiCancelTabTarget, false);
+            return true;
+        }
+
+        public void OnTabEnter(TabButton button)
+        {
+            //No-Op as of yet, may expose or something later
+        }
+
+        public void OnTabExit(TabButton button)
+        {
+            //No-Op as of yet, may expose or something later
+        }
+
+        public void SetUsingController(bool isUsingController)
+        {
+            this.isUsingController = isUsingController;
+        }
+
+        public void SetUIFocus()
+        {
+            if (!isUsingController)
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+                return;
+            }
+
+            if (isUsingController && currentTab.setFocusToGameObject == null)
+            {
+                Debug.LogError($"Attempting to set UI focus to tab {currentTab.tabPage.name} but tab's setFocusToGameobject = {currentTab.setFocusToGameObject}");
+                return;
+            }
+
+            EventSystem.current.SetSelectedGameObject(currentTab.setFocusToGameObject);
+        }
+
+        public void OnTabSelected(TabButton button)
+        {
+            SelectTab(button, false);
+        }
+
+        void Awake()
+        {
+            foreach (var tab in tabs)
+            {
+                tab.button.TabGroup = this;
+            }
+            UIReset();
+        }
+
+        [Serializable]
+        public class Tab
+        {
+            public TabButton button;
+            public GameObject tabPage;
+            public GameObject setFocusToGameObject;
+            public TabButton uiCancelTabTarget;
+        }
     }
 }
