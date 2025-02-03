@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 namespace Nevelson.UIHelper
 {
+    [RequireComponent(typeof(CanvasGroup))]
     public class Popup : MonoBehaviour, ISelectables, ISetUIFocus
     {
 

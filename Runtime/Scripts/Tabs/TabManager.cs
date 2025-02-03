@@ -22,13 +22,11 @@ namespace Nevelson.UIHelper
 
         public void UIReset()
         {
-            Debug.Log("TEST: Calling from UI RESET!");
-            SelectTab(tabs[startingTab].button, initialize: true);
-            //this could in theory be an animation as long as it resets to the correct tab...
-            //animationTabReset?.Invoke(currentTab.tabPage);
+            SelectTab(tabs[startingTab].button);
+            animationTabReset?.Invoke(currentTab.tabPage);
         }
 
-        void SelectTab(TabButton button, bool initialize)
+        void SelectTab(TabButton button)
         {
             if (selectedTab != null)
             {
@@ -56,20 +54,14 @@ namespace Nevelson.UIHelper
 
             for (int i = 0; i < tabs.Length; i++)
             {
-                if (i == index)//tabs[i].tabPage.activeInHierarchy)
+                if (i == index)
                 {
                     if (animateDisableTab.GetPersistentEventCount() == 0)
                     {
-                        //Debug.Log($"TEST: Calling Do Anims on Tab manager. Init == {initialize}");
-                        //if (!initialize)
-                        //{
                         CanvasGroup cv = tabs[index].tabPage.GetComponent<CanvasGroup>();
                         cv.alpha = 1;
                         cv.interactable = true;
                         cv.blocksRaycasts = true;
-                        //tabs[index].tabPage.SetActive(true);
-                        //}
-
                         currentTab = tabs[index];
                         SetUIFocus();
                     }
@@ -97,17 +89,13 @@ namespace Nevelson.UIHelper
                         Debug.LogError($"Animate tab hide does not support more than one event");
                         Debug.LogError($"Animate appear tab does not support more than one event");
                     }
-
-                    //break;
                 }
                 else
                 {
-                    //Debug.Log($"TEST: Hit this");
                     CanvasGroup cv = tabs[i].tabPage.GetComponent<CanvasGroup>();
                     cv.alpha = 0;
                     cv.interactable = false;
                     cv.blocksRaycasts = false;
-                    // SetActive(false);
                 }
             }
         }
@@ -118,8 +106,7 @@ namespace Nevelson.UIHelper
             {
                 return false;
             }
-            Debug.Log("TEST: Calling from UI CANCEL");
-            SelectTab(currentTab.uiCancelTabTarget, false);
+            SelectTab(currentTab.uiCancelTabTarget);
             return true;
         }
 
@@ -157,8 +144,7 @@ namespace Nevelson.UIHelper
 
         public void OnTabSelected(TabButton button)
         {
-            Debug.Log("TEST: calling from on Tab selected!");
-            SelectTab(button, false);
+            SelectTab(button);
         }
 
         void Awake()

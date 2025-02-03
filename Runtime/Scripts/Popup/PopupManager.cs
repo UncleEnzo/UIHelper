@@ -54,7 +54,8 @@ namespace Nevelson.UIHelper
                 previousPopup.LockSelectables();
             }
 
-            popup.gameObject.SetActive(true);
+            PopupEnable(popup);
+            //popup.gameObject.SetActive(true);
             popup.SetUsingController(isUsingController);
             popup.AnimateOpen(openPopups);
         }
@@ -90,7 +91,8 @@ namespace Nevelson.UIHelper
                 return;
             }
 
-            popup.gameObject.SetActive(false);
+            PopupDisable(popup);
+            //popup.gameObject.SetActive(false);
             openPopups.Pop();
         }
 
@@ -112,7 +114,8 @@ namespace Nevelson.UIHelper
 
             void CleanUpPopup()
             {
-                popup.gameObject.SetActive(false);
+                PopupDisable(popup);
+                //popup.gameObject.SetActive(false);
                 openPopups.Pop();
                 if (openPopups.Count != 0)
                 {
@@ -133,8 +136,25 @@ namespace Nevelson.UIHelper
             foreach (var popup in GetComponentsInChildren<Popup>(true))
             {
                 popup.Init(ClosePopup);
-                popup.gameObject.SetActive(false);
+                PopupDisable(popup);
+                //popup.gameObject.SetActive(false);
             }
+        }
+
+        void PopupEnable(Popup popup)
+        {
+            CanvasGroup cv = popup.GetComponent<CanvasGroup>();
+            cv.alpha = 1;
+            cv.interactable = true;
+            cv.blocksRaycasts = true;
+        }
+
+        void PopupDisable(Popup popup)
+        {
+            CanvasGroup cv = popup.GetComponent<CanvasGroup>();
+            cv.alpha = 0;
+            cv.interactable = false;
+            cv.blocksRaycasts = false;
         }
     }
 }
