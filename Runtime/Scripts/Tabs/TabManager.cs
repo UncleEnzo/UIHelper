@@ -56,24 +56,17 @@ namespace Nevelson.UIHelper
 
             for (int i = 0; i < tabs.Length; i++)
             {
-                if (tabs[i].tabPage.activeInHierarchy)
+                if (i == index)//tabs[i].tabPage.activeInHierarchy)
                 {
                     if (animateDisableTab.GetPersistentEventCount() == 0)
                     {
-                        Debug.Log($"TEST: Calling Do Anims on Tab manager. Init == {initialize}");
+                        //Debug.Log($"TEST: Calling Do Anims on Tab manager. Init == {initialize}");
                         //if (!initialize)
                         //{
-                        Debug.Log($"TEST: Hit this");
-                        CanvasGroup cv = tabs[i].tabPage.GetComponent<CanvasGroup>();
-                        cv.alpha = 0;
-                        cv.interactable = false;
-                        cv.blocksRaycasts = false;
-                        // SetActive(false);
-
-                        CanvasGroup cv2 = tabs[index].tabPage.GetComponent<CanvasGroup>();
-                        cv2.alpha = 1;
-                        cv2.interactable = true;
-                        cv2.blocksRaycasts = true;
+                        CanvasGroup cv = tabs[index].tabPage.GetComponent<CanvasGroup>();
+                        cv.alpha = 1;
+                        cv.interactable = true;
+                        cv.blocksRaycasts = true;
                         //tabs[index].tabPage.SetActive(true);
                         //}
 
@@ -105,7 +98,16 @@ namespace Nevelson.UIHelper
                         Debug.LogError($"Animate appear tab does not support more than one event");
                     }
 
-                    break;
+                    //break;
+                }
+                else
+                {
+                    //Debug.Log($"TEST: Hit this");
+                    CanvasGroup cv = tabs[i].tabPage.GetComponent<CanvasGroup>();
+                    cv.alpha = 0;
+                    cv.interactable = false;
+                    cv.blocksRaycasts = false;
+                    // SetActive(false);
                 }
             }
         }
