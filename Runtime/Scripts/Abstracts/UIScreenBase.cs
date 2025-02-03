@@ -155,26 +155,26 @@ namespace Nevelson.UIHelper
         public void UnlockSelectables()
         {
             //Debug.Log($"{gameObject.name} Unlocking Selectables");
-            InitSelectables();
+            //InitSelectables();
 
-            bool failure = false;
-            foreach (KeyValuePair<Selectable, Navigation> selectable in selectables)
-            {
-                //Debug.Log($"Unlocking UI element: {selectable.Key.gameObject.name}");
-                if (selectable.Key == null)
-                {
-                    failure = true;
-                    break;
-                }
-                selectable.Key.interactable = true;
-                selectable.Key.navigation = selectable.Value;
-            }
+            //bool failure = false;
+            //foreach (KeyValuePair<Selectable, Navigation> selectable in selectables)
+            //{
+            //    //Debug.Log($"Unlocking UI element: {selectable.Key.gameObject.name}");
+            //    if (selectable.Key == null)
+            //    {
+            //        failure = true;
+            //        break;
+            //    }
+            //    selectable.Key.interactable = true;
+            //    selectable.Key.navigation = selectable.Value;
+            //}
 
-            if (failure)
-            {
-                UpdateSelectables();
-                UnlockSelectables();
-            }
+            //if (failure)
+            //{
+            //    UpdateSelectables();
+            //    UnlockSelectables();
+            //}
         }
 
         public void SetUsingController(bool isUsingController)
