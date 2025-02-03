@@ -37,21 +37,21 @@ namespace Nevelson.UIHelper
             selectedTab = button;
             selectedTab.Select();
 
-            //    int index = -1;
-            //    for (int i = 0; i < tabs.Length; i++)
-            //    {
-            //        if (tabs[i].button == button)
-            //        {
-            //            index = i;
-            //            break;
-            //        }
-            //    }
+            int index = -1;
+            for (int i = 0; i < tabs.Length; i++)
+            {
+                if (tabs[i].button == button)
+                {
+                    index = i;
+                    break;
+                }
+            }
 
-            //    if (index == -1)
-            //    {
-            //        Debug.LogError($"Could not find index of button {button.gameObject.name}");
-            //        return;
-            //    }
+            if (index == -1)
+            {
+                Debug.LogError($"Could not find index of button {button.gameObject.name}");
+                return;
+            }
 
             //    for (int i = 0; i < tabs.Length; i++)
             //    {
