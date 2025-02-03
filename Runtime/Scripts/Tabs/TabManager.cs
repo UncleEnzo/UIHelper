@@ -64,7 +64,16 @@ namespace Nevelson.UIHelper
                         if (!initialize)
                         {
                             Debug.Log($"TEST: Hit this");
-                            //tabs[i].tabPage.SetActive(false);
+                            CanvasGroup cv = tabs[i].tabPage.GetComponent<CanvasGroup>();
+                            cv.alpha = 0;
+                            cv.interactable = false;
+                            cv.blocksRaycasts = false;
+                            // SetActive(false);
+
+                            CanvasGroup cv2 = tabs[index].tabPage.GetComponent<CanvasGroup>();
+                            cv2.alpha = 1;
+                            cv2.interactable = true;
+                            cv2.blocksRaycasts = true;
                             //tabs[index].tabPage.SetActive(true);
                         }
 
