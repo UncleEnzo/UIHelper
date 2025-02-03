@@ -22,7 +22,7 @@ namespace Nevelson.UIHelper
 
         public void UIReset()
         {
-            SelectTab(tabs[startingTab].button, true);
+            SelectTab(tabs[startingTab].button, initialize: true);
             //this could in theory be an animation as long as it resets to the correct tab...
             //animationTabReset?.Invoke(currentTab.tabPage);
         }
@@ -57,15 +57,16 @@ namespace Nevelson.UIHelper
             {
                 if (tabs[i].tabPage.activeInHierarchy)
                 {
+                    //so the bug is actually that it's not hitting initialize here
                     if (initialize)
                     {
-                        NoAnimsDo(i, index);
+                        NoAnimsDo(i, index, initialize);
                     }
                     else
                     {
                         if (animateDisableTab.GetPersistentEventCount() == 0)
                         {
-                            NoAnimsDo(i, index);
+                            NoAnimsDo(i, index, initialize);
                         }
                         //else if (animateDisableTab.GetPersistentEventCount() == 1)
                         //{
@@ -97,10 +98,18 @@ namespace Nevelson.UIHelper
             }
         }
 
-        void NoAnimsDo(int i, int index)
+        void NoAnimsDo(int i, int index, bool initialize)
         {
-            //tabs[i].tabPage.SetActive(false);
-            //tabs[index].tabPage.SetActive(true);
+            if (!initialize)
+            {
+                tabs[i].tabPage.SetActive(false);
+                tabs[index].tabPage.SetActive(true);
+            }
+            else
+            {
+                Debug.Log("HIT INITIALIZE");
+            }
+
             currentTab = tabs[index];
             SetUIFocus();
         }
