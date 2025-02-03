@@ -73,14 +73,15 @@ namespace Nevelson.UIHelper
             SelectTab(button, false);
         }
 
-        //todo testing
-        void Start()
+        //todo testing >this was originally away
+        void Awake()
         {
+            //yield return null;
             foreach (var tab in tabs)
             {
                 tab.button.TabGroup = this;
             }
-            UIReset();
+            //UIReset();
         }
 
         void SelectTab(TabButton button, bool initialize)
