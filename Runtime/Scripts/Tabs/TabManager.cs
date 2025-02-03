@@ -63,8 +63,9 @@ namespace Nevelson.UIHelper
                         Debug.Log($"TEST: Calling Do Anims on Tab manager. Init == {initialize}");
                         if (!initialize)
                         {
-                            tabs[i].tabPage.SetActive(false);
-                            tabs[index].tabPage.SetActive(true);
+                            Debug.Log($"TEST: Hit this");
+                            //tabs[i].tabPage.SetActive(false);
+                            //tabs[index].tabPage.SetActive(true);
                         }
 
                         currentTab = tabs[index];
