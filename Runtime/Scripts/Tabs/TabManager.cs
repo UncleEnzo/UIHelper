@@ -156,15 +156,15 @@ namespace Nevelson.UIHelper
             //            break;
             //        }
             //    }
-            //}
-        }
-
-        [Serializable]
-        public class Tab
-        {
-            public TabButton button;
-            public GameObject tabPage;
-            public GameObject setFocusToGameObject;
-            public TabButton uiCancelTabTarget;
         }
     }
+
+    [Serializable]
+    public class Tab
+    {
+        public TabButton button;
+        public GameObject tabPage;
+        public GameObject setFocusToGameObject;
+        public TabButton uiCancelTabTarget;
+    }
+}
