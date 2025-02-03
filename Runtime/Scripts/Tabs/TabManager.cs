@@ -53,54 +53,54 @@ namespace Nevelson.UIHelper
                 return;
             }
 
-            //    for (int i = 0; i < tabs.Length; i++)
-            //    {
-            //        if (tabs[i].tabPage.activeInHierarchy)
-            //        {
-            //            if (initialize)
-            //            {
-            //                tabs[i].tabPage.SetActive(false);
-            //                tabs[index].tabPage.SetActive(true);
-            //                currentTab = tabs[index];
-            //                SetUIFocus();
-            //            }
-            //            else
-            //            {
-            //                if (animateDisableTab.GetPersistentEventCount() == 0)
-            //                {
-            //                    tabs[i].tabPage.SetActive(false);
-            //                    tabs[index].tabPage.SetActive(true);
-            //                    currentTab = tabs[index];
-            //                    SetUIFocus();
-            //                }
-            //                else if (animateDisableTab.GetPersistentEventCount() == 1)
-            //                {
-            //                    uiScreen.LockSelectables();
-            //                    animateDisableTab.Invoke(
-            //                        () =>
-            //                        {
-            //                            tabs[i].tabPage.SetActive(false);
-            //                            tabs[index].tabPage.SetActive(true);
-            //                            currentTab = tabs[index];
-            //                            animateAppearTab.Invoke(() =>
-            //                            {
-            //                                uiScreen.UnlockSelectables();
-            //                                SetUIFocus();
-            //                            },
-            //                            tabs[index].tabPage);
-            //                        },
-            //                        tabs[i].tabPage
-            //                    );
-            //                }
-            //                else
-            //                {
-            //                    Debug.LogError($"Animate tab hide does not support more than one event");
-            //                    Debug.LogError($"Animate appear tab does not support more than one event");
-            //                }
-            //            }
-            //            break;
-            //        }
-            //    }
+            for (int i = 0; i < tabs.Length; i++)
+            {
+                if (tabs[i].tabPage.activeInHierarchy)
+                {
+                    if (initialize)
+                    {
+                        tabs[i].tabPage.SetActive(false);
+                        tabs[index].tabPage.SetActive(true);
+                        currentTab = tabs[index];
+                        SetUIFocus();
+                    }
+                    //            else
+                    //            {
+                    //                if (animateDisableTab.GetPersistentEventCount() == 0)
+                    //                {
+                    //                    tabs[i].tabPage.SetActive(false);
+                    //                    tabs[index].tabPage.SetActive(true);
+                    //                    currentTab = tabs[index];
+                    //                    SetUIFocus();
+                    //                }
+                    //                else if (animateDisableTab.GetPersistentEventCount() == 1)
+                    //                {
+                    //                    uiScreen.LockSelectables();
+                    //                    animateDisableTab.Invoke(
+                    //                        () =>
+                    //                        {
+                    //                            tabs[i].tabPage.SetActive(false);
+                    //                            tabs[index].tabPage.SetActive(true);
+                    //                            currentTab = tabs[index];
+                    //                            animateAppearTab.Invoke(() =>
+                    //                            {
+                    //                                uiScreen.UnlockSelectables();
+                    //                                SetUIFocus();
+                    //                            },
+                    //                            tabs[index].tabPage);
+                    //                        },
+                    //                        tabs[i].tabPage
+                    //                    );
+                    //                }
+                    //                else
+                    //                {
+                    //                    Debug.LogError($"Animate tab hide does not support more than one event");
+                    //                    Debug.LogError($"Animate appear tab does not support more than one event");
+                    //                }
+                    //            }
+                    //            break;
+                }
+            }
         }
 
         public bool UICancel()
