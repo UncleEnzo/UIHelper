@@ -99,10 +99,10 @@ namespace Nevelson.UIHelper
 
         void NoAnimsDo(int i, int index)
         {
-            tabs[i].tabPage.SetActive(false);
-            tabs[index].tabPage.SetActive(true);
-            //currentTab = tabs[index];
-            //SetUIFocus();
+            //tabs[i].tabPage.SetActive(false);
+            //tabs[index].tabPage.SetActive(true);
+            currentTab = tabs[index];
+            SetUIFocus();
         }
 
         public bool UICancel()
