@@ -6,6 +6,7 @@ namespace Nevelson.UIHelper
     public class PopupManager : MonoBehaviour, IUIManager, ISetUIFocus
     {
         [SerializeField] UIScreen uiScreen;
+        [SerializeField] bool allowPopupClose = true;
         Stack<Popup> openPopups = new Stack<Popup>();
         bool isUsingController;
 
@@ -98,6 +99,8 @@ namespace Nevelson.UIHelper
 
         void ClosePopup(Popup popup)
         {
+            if (!allowPopupClose) return;
+
             if (!openPopups.Contains(popup))
             {
                 Debug.LogError($"The popup you are trying to close {popup.gameObject.name} is not open");
