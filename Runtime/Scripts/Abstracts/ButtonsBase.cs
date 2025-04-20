@@ -22,6 +22,7 @@ namespace Nevelson.UIHelper
             }
         }
 
+        public bool IsLockedForAnimation { get => isLockedForAnimation; }
         const string lockedForAnimationError = "Trying to transition screens but another screen is animating!";
 
         protected virtual void Update()
