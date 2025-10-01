@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Nevelson.UIHelper
 {
@@ -7,6 +8,8 @@ namespace Nevelson.UIHelper
     {
         [SerializeField] UIScreen uiScreen;
         [SerializeField] bool allowPopupClose = true;
+        [SerializeField] UnityEvent onCloseAPopup;
+        [SerializeField] UnityEvent onAllPopupsClosed;
         Stack<Popup> openPopups = new Stack<Popup>();
         bool isUsingController;
 
@@ -125,10 +128,13 @@ namespace Nevelson.UIHelper
                     Popup previousPopup = openPopups.Peek();
                     previousPopup.UnlockSelectables();
                     previousPopup.SetUIFocus();
+                    onCloseAPopup?.Invoke();
                     return;
                 }
                 uiScreen.UnlockSelectables();
                 uiScreen.SetUIFocus();
+                onCloseAPopup?.Invoke();
+                onAllPopupsClosed?.Invoke();
             }
 
             popup.AnimateClose(CleanUpPopup);
