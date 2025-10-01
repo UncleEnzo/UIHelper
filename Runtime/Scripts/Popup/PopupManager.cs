@@ -8,8 +8,8 @@ namespace Nevelson.UIHelper
     {
         [SerializeField] UIScreen uiScreen;
         [SerializeField] bool allowPopupClose = true;
-        [SerializeField] UnityEvent onCloseAPopup;
-        [SerializeField] UnityEvent onAllPopupsClosed;
+        public UnityEvent onCloseAPopup;
+        public UnityEvent onAllPopupsClosed;
         Stack<Popup> openPopups = new Stack<Popup>();
         bool isUsingController;
 
